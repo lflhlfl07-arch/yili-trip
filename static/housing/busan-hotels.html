@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🇰🇷 釜山团建酒店 · 景点便利度 Top 20</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5}
+.hdr{background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);color:#fff;padding:28px 20px;text-align:center}
+.hdr h1{font-size:22px;letter-spacing:1px}
+.hdr .sub{font-size:13px;opacity:.75;margin-top:6px}
+.tags{display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap}
+.tags span{background:rgba(255,255,255,.12);padding:5px 14px;border-radius:20px;font-size:11px;backdrop-filter:blur(4px)}
+
+.bar{background:#fff;padding:10px 20px;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.bar select{padding:6px 10px;border:1px solid #ddd;border-radius:8px;font-size:12px}
+.sb{padding:6px 14px;border:1px solid #ddd;border-radius:8px;font-size:12px;background:#fff;cursor:pointer;transition:.2s}
+.sb:hover{background:#eef}
+.sb.on{background:#0f3460;color:#fff;border-color:#0f3460}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px;padding:16px;max-width:1200px;margin:0 auto}
+
+.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.06);transition:.3s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.13)}
+.card.top3{border:2px solid #f0c040}
+
+.card-img{height:200px;background-size:cover;background-position:center;position:relative}
+.rank{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.65);color:#fff;font-size:14px;font-weight:800;padding:4px 10px;border-radius:8px}
+.card.top3 .rank{background:#f0c040;color:#1a1a2e}
+.badge{position:absolute;top:10px;left:10px;color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:8px}
+.area-tag{position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,.5);color:#fff;font-size:11px;padding:3px 10px;border-radius:6px}
+
+.card-body{padding:12px 14px 16px}
+.card-body h3{font-size:15px;font-weight:700;color:#222;line-height:1.4}
+.meta{font-size:11px;color:#999;margin:2px 0 8px}
+.transit{font-size:12px;color:#555;padding:5px 10px;background:#f3f6ff;border-radius:8px;margin-bottom:8px}
+.transit b{color:#0f3460}
+
+.attr-list{margin-bottom:10px}
+.attr-label{font-size:11px;color:#888;margin-bottom:4px}
+.attr-chips{display:flex;flex-wrap:wrap;gap:4px}
+.attr-chip{font-size:10px;color:#555;background:#f0f4f0;padding:3px 8px;border-radius:6px}
+.attr-chip b{color:#e74c3c;font-size:10px}
+
+.price-row{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #f0f0f0}
+.price{font-size:24px;font-weight:800;color:#e74c3c}
+.unit{font-size:12px;color:#999}
+.pt{font-size:11px;color:#999;margin-top:1px}
+.team{text-align:right;background:linear-gradient(135deg,#f5f7ff,#eaefff);padding:8px 12px;border-radius:10px}
+.tpp{font-size:15px;font-weight:800;color:#0f3460}
+.tt{font-size:10px;color:#888;margin-top:1px}
+
+.ft{text-align:center;padding:24px;font-size:11px;color:#999;line-height:1.8}
+
+@media(max-width:768px){.grid{grid-template-columns:1fr;padding:12px}.card-img{height:170px}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <h1>🇰🇷 釜山团建酒店 Top 20</h1>
+  <div class="sub">按景点便利度排名 · 步行可达景点越多越靠前</div>
+  <div class="tags">
+    <span>📅 6.26 → 6.29（3晚）</span>
+    <span>👥 13人 · 5间房</span>
+    <span>💑 2对情侣</span>
+    <span>🏖️ 海云台海滩</span>
+    <span>🎏 甘川文化村</span>
+    <span>🐟 札嘎其市场</span>
+    <span>⛩️ 海东龙宫寺</span>
+  </div>
+</div>
+
+<div class="bar">
+  <select id="fA" onchange="fil()">
+    <option value="">全部区域</option>
+    <option value="海云台">🏖️ 海云台</option>
+    <option value="广安里">🌊 广安里</option>
+    <option value="西面">🏙️ 西面</option>
+    <option value="釜山站/南浦">🚉 釜山站/南浦</option>
+  </select>
+  <button class="sb on" onclick="srt('conv',this)">景点便利↓</button>
+  <button class="sb" onclick="srt('score',this)">评分↓</button>
+  <button class="sb" onclick="srt('price',this)">价格↑</button>
+</div>
+
+<div class="grid" id="g">
+    <div class="card top3" data-area="釜山站/南浦" data-price="1396" data-score="8.5" data-conv="18.25">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/470998188.jpg?k=88c0f2e7cd3f8c33ad9f480c268ef9cc5946dc0030287194926a0c6a5faae529&o=')">
+        <span class="rank">#1</span>
+        <span class="badge" style="background:#27ae60">8.5 非常好</span>
+        <span class="area-tag">🚉 釜山站/南浦</span>
+      </div>
+      <div class="card-body">
+        <h3>Urbanstay Boutique Nampo BIFF</h3>
+        <div class="meta">⭐⭐⭐⭐ · 947条评价</div>
+        <div class="transit">🚇 南浦站(1号线) <b>181m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">札嘎其海鲜市场 <b>221m</b></span><span class="attr-chip">BIFF广场/南浦洞 <b>181m</b></span><span class="attr-chip">釜山塔/龙头山公园 <b>373m</b></span><span class="attr-chip">影岛大桥 <b>1157m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥465</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥1,396</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥537</div>
+            <div class="tt">5间共 ¥6,980</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card top3" data-area="釜山站/南浦" data-price="1439" data-score="8.3" data-conv="18.15">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/575958250.jpg?k=14963c2da273cbd1cfde06e24e025ac76e6061a3700dbac87c13ed1724639993&o=')">
+        <span class="rank">#2</span>
+        <span class="badge" style="background:#f39c12">8.3 非常好</span>
+        <span class="area-tag">🚉 釜山站/南浦</span>
+      </div>
+      <div class="card-body">
+        <h3>Cotice The Bridge</h3>
+        <div class="meta">⭐⭐⭐ · 497条评价</div>
+        <div class="transit">🚇 南浦站(1号线) <b>138m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">札嘎其海鲜市场 <b>385m</b></span><span class="attr-chip">BIFF广场/南浦洞 <b>138m</b></span><span class="attr-chip">釜山塔/龙头山公园 <b>633m</b></span><span class="attr-chip">影岛大桥 <b>1346m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥480</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥1,439</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥553</div>
+            <div class="tt">5间共 ¥7,195</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card top3" data-area="釜山站/南浦" data-price="5157" data-score="9.6" data-conv="16.8">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/403181913.jpg?k=93bde444c42ef3d89cf1e989f4a41a8f135d8383371fc9cbbfbdf9e3b8218e26&o=')">
+        <span class="rank">#3</span>
+        <span class="badge" style="background:#1abc9c">9.6 优异的</span>
+        <span class="area-tag">🚉 釜山站/南浦</span>
+      </div>
+      <div class="card-body">
+        <h3>Good Ol' Days Hotel</h3>
+        <div class="meta"> · 343条评价</div>
+        <div class="transit">🚇 南浦站(1号线) <b>790m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">札嘎其海鲜市场 <b>709m</b></span><span class="attr-chip">BIFF广场/南浦洞 <b>790m</b></span><span class="attr-chip">釜山塔/龙头山公园 <b>291m</b></span><span class="attr-chip">影岛大桥 <b>1189m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥1719</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥5,157</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥1983</div>
+            <div class="tt">5间共 ¥25,785</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="釜山站/南浦" data-price="3315" data-score="9.3" data-conv="16.65">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/517293144.jpg?k=c0940f5ca986350d8043143f88ae8bc0dbe7337c585780605559cf2e5c756271&o=')">
+        <span class="rank">#4</span>
+        <span class="badge" style="background:#1abc9c">9.3 好极了</span>
+        <span class="area-tag">🚉 釜山站/南浦</span>
+      </div>
+      <div class="card-body">
+        <h3>Hotel Ground27</h3>
+        <div class="meta"> · 335条评价</div>
+        <div class="transit">🚇 南浦站(1号线) <b>611m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">札嘎其海鲜市场 <b>465m</b></span><span class="attr-chip">BIFF广场/南浦洞 <b>611m</b></span><span class="attr-chip">釜山塔/龙头山公园 <b>318m</b></span><span class="attr-chip">影岛大桥 <b>959m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥1105</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥3,315</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥1275</div>
+            <div class="tt">5间共 ¥16,575</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="釜山站/南浦" data-price="2901" data-score="8.4" data-conv="16.2">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/263864998.jpg?k=16b3b3af117ce300597ce464107b66e5984817709a4a8a4292c983f8cc0fa5d8&o=')">
+        <span class="rank">#5</span>
+        <span class="badge" style="background:#f39c12">8.4 非常好</span>
+        <span class="area-tag">🚉 釜山站/南浦</span>
+      </div>
+      <div class="card-body">
+        <h3>Lavalse Hotel</h3>
+        <div class="meta">⭐⭐⭐⭐ · 1073条评价</div>
+        <div class="transit">🚇 南浦站(1号线) <b>1051m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">札嘎其海鲜市场 <b>809m</b></span><span class="attr-chip">BIFF广场/南浦洞 <b>1051m</b></span><span class="attr-chip">釜山塔/龙头山公园 <b>915m</b></span><span class="attr-chip">影岛大桥 <b>453m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥967</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥2,901</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥1116</div>
+            <div class="tt">5间共 ¥14,505</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="釜山站/南浦" data-price="1469" data-score="8.3" data-conv="15.15">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/73971527.jpg?k=2f77b8758c9b3e41754913ae098ecc7bfc4f5ffddfa08c442fdf05f577953ba6&o=')">
+        <span class="rank">#6</span>
+        <span class="badge" style="background:#f39c12">8.3 非常好</span>
+        <span class="area-tag">🚉 釜山站/南浦</span>
+      </div>
+      <div class="card-body">
+        <h3>GnB酒店</h3>
+        <div class="meta">⭐⭐⭐⭐ · 1335条评价</div>
+        <div class="transit">🚇 南浦站(1号线) <b>490m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">札嘎其海鲜市场 <b>737m</b></span><span class="attr-chip">BIFF广场/南浦洞 <b>490m</b></span><span class="attr-chip">釜山塔/龙头山公园 <b>713m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥490</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥1,469</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥565</div>
+            <div class="tt">5间共 ¥7,345</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="釜山站/南浦" data-price="1126" data-score="8.3" data-conv="13.15">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/106059335.jpg?k=2cceb4111fe59622f1ad045cf4443159536b5c12a1bd1e9b0b2fcc8a27a20de9&o=')">
+        <span class="rank">#7</span>
+        <span class="badge" style="background:#f39c12">8.3 非常好</span>
+        <span class="area-tag">🚉 釜山站/南浦</span>
+      </div>
+      <div class="card-body">
+        <h3>Toyoko Inn Busan Jungang Station</h3>
+        <div class="meta">⭐⭐⭐ · 2202条评价</div>
+        <div class="transit">🚇 釜山站(1号线/KTX) <b>728m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">札嘎其海鲜市场 <b>1485m</b></span><span class="attr-chip">BIFF广场/南浦洞 <b>1453m</b></span><span class="attr-chip">釜山塔/龙头山公园 <b>947m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥375</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥1,126</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥433</div>
+            <div class="tt">5间共 ¥5,630</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="西面" data-price="1803" data-score="9.3" data-conv="9.65">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/310749900.jpg?k=d3e5df4aac82b2fc26943ec3eb277c735a276598489577099bcf6d63a00b01af&o=')">
+        <span class="rank">#8</span>
+        <span class="badge" style="background:#1abc9c">9.3 好极了</span>
+        <span class="area-tag">🏙️ 西面</span>
+      </div>
+      <div class="card-body">
+        <h3>Sangsang Stay Busan</h3>
+        <div class="meta"> · 877条评价</div>
+        <div class="transit">🚇 西面站(1/2号线换乘) <b>419m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">西面购物街 <b>419m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥601</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥1,803</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥693</div>
+            <div class="tt">5间共 ¥9,015</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="海云台" data-price="2707" data-score="9.2" data-conv="9.6">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/796162470.jpg?k=a18ec3960acaf036327a18b850b750721108a910d10e01b8b01abe56edbddb05&o=')">
+        <span class="rank">#9</span>
+        <span class="badge" style="background:#1abc9c">9.2 好极了</span>
+        <span class="area-tag">🏖️ 海云台</span>
+      </div>
+      <div class="card-body">
+        <h3>Ciel de Mer</h3>
+        <div class="meta"> · 642条评价</div>
+        <div class="transit">🚇 海云台站(2号线) <b>351m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">海云台海滩 <b>643m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥902</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥2,707</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥1041</div>
+            <div class="tt">5间共 ¥13,535</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="海云台" data-price="5691" data-score="9.2" data-conv="9.6">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/274680179.jpg?k=9f32fc5cb943f6998db47daaad1044ae59a112f550c14d29913833ef9e09b803&o=')">
+        <span class="rank">#10</span>
+        <span class="badge" style="background:#1abc9c">9.2 好极了</span>
+        <span class="area-tag">🏖️ 海云台</span>
+      </div>
+      <div class="card-body">
+        <h3>Grand Josun Busan</h3>
+        <div class="meta">⭐⭐⭐⭐⭐ · 1235条评价</div>
+        <div class="transit">🚇 海云台站(2号线) <b>304m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">海云台海滩 <b>287m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥1897</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥5,691</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥2189</div>
+            <div class="tt">5间共 ¥28,455</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="西面" data-price="1358" data-score="9.1" data-conv="9.55">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/828566457.jpg?k=7ddf03ebcc0865dd5163c37119335fc31398fe06d7669ab5fdaabeda99cd7a2b&o=')">
+        <span class="rank">#11</span>
+        <span class="badge" style="background:#1abc9c">9.1 好极了</span>
+        <span class="area-tag">🏙️ 西面</span>
+      </div>
+      <div class="card-body">
+        <h3>Gem Stay Seomyeon</h3>
+        <div class="meta"> · 1030条评价</div>
+        <div class="transit">🚇 西面站(1/2号线换乘) <b>245m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">西面购物街 <b>245m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥453</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥1,358</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥522</div>
+            <div class="tt">5间共 ¥6,790</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="海云台" data-price="3008" data-score="9" data-conv="9.5">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/574252874.jpg?k=6f7d12a8a142de31aeb1bb5fc7a054764ea9c4be928f7073899511da39ff8968&o=')">
+        <span class="rank">#12</span>
+        <span class="badge" style="background:#1abc9c">9 好极了</span>
+        <span class="area-tag">🏖️ 海云台</span>
+      </div>
+      <div class="card-body">
+        <h3>L7 HAEUNDAE by LOTTE HOTELS</h3>
+        <div class="meta">⭐⭐⭐⭐ · 2260条评价</div>
+        <div class="transit">🚇 海云台站(2号线) <b>437m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">海云台海滩 <b>133m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥1003</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥3,008</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥1157</div>
+            <div class="tt">5间共 ¥15,040</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="海云台" data-price="4162" data-score="9" data-conv="9.5">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/762944124.jpg?k=3edcdc623466c4f1fa68a68b04e79e08d28d03f24eba8dfc3d3154c1599993e1&o=')">
+        <span class="rank">#13</span>
+        <span class="badge" style="background:#1abc9c">9 好极了</span>
+        <span class="area-tag">🏖️ 海云台</span>
+      </div>
+      <div class="card-body">
+        <h3>UH Continental CenterPoint</h3>
+        <div class="meta">⭐⭐⭐⭐ · 170条评价</div>
+        <div class="transit">🚇 海云台站(2号线) <b>282m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">海云台海滩 <b>599m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥1387</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥4,162</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥1601</div>
+            <div class="tt">5间共 ¥20,810</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="广安里" data-price="1022" data-score="9" data-conv="9.5">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/117339302.jpg?k=cafe09480cfc29272d206599c864892970ee7ef8b1b737505baafcb7e18511f2&o=')">
+        <span class="rank">#14</span>
+        <span class="badge" style="background:#1abc9c">9 好极了</span>
+        <span class="area-tag">🌊 广安里</span>
+      </div>
+      <div class="card-body">
+        <h3>光州里1号酒店</h3>
+        <div class="meta"> · 806条评价</div>
+        <div class="transit">🚇 广安里站(2号线) <b>411m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">广安里海滩 <b>147m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥341</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥1,022</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥393</div>
+            <div class="tt">5间共 ¥5,110</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="海云台" data-price="1968" data-score="8.9" data-conv="9.45">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/314828284.jpg?k=bbf7024af0e0c4e82dfb5138149641697877aa93e629dc626f8638951e639534&o=')">
+        <span class="rank">#15</span>
+        <span class="badge" style="background:#27ae60">8.9 很棒</span>
+        <span class="area-tag">🏖️ 海云台</span>
+      </div>
+      <div class="card-body">
+        <h3>海云台MS酒店</h3>
+        <div class="meta">⭐⭐⭐ · 1370条评价</div>
+        <div class="transit">🚇 海云台站(2号线) <b>391m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">海云台海滩 <b>137m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥656</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥1,968</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥757</div>
+            <div class="tt">5间共 ¥9,840</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="西面" data-price="3220" data-score="8.8" data-conv="9.4">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/416034295.jpg?k=50b4fb1b8342198379e032ada55a6ce56dffb579bb541d96c178a1bd9ac4575b&o=')">
+        <span class="rank">#16</span>
+        <span class="badge" style="background:#27ae60">8.8 很棒</span>
+        <span class="area-tag">🏙️ 西面</span>
+      </div>
+      <div class="card-body">
+        <h3>釜山乐天酒店</h3>
+        <div class="meta">⭐⭐⭐⭐⭐ · 2508条评价</div>
+        <div class="transit">🚇 西面站(1/2号线换乘) <b>321m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">西面购物街 <b>321m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥1073</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥3,220</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥1238</div>
+            <div class="tt">5间共 ¥16,100</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="西面" data-price="1460" data-score="8.8" data-conv="9.4">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/163321022.jpg?k=fdc28ada618c14724950c2fcd5205e79c307c9d62577618717edfe371439b233&o=')">
+        <span class="rank">#17</span>
+        <span class="badge" style="background:#27ae60">8.8 很棒</span>
+        <span class="area-tag">🏙️ 西面</span>
+      </div>
+      <div class="card-body">
+        <h3>Hotel Kyungsung</h3>
+        <div class="meta">⭐⭐⭐ · 1252条评价</div>
+        <div class="transit">🚇 西面站(1/2号线换乘) <b>319m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">西面购物街 <b>319m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥487</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥1,460</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥562</div>
+            <div class="tt">5间共 ¥7,300</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="西面" data-price="1109" data-score="8.7" data-conv="9.35">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/255504211.jpg?k=c3ffd1f5095f0033841c98449dcaa86041ff0f44c05c5df0cea216826e504626&o=')">
+        <span class="rank">#18</span>
+        <span class="badge" style="background:#27ae60">8.7 很棒</span>
+        <span class="area-tag">🏙️ 西面</span>
+      </div>
+      <div class="card-body">
+        <h3>LALA VIANCO BUSINESS Hotel</h3>
+        <div class="meta">⭐⭐⭐ · 1006条评价</div>
+        <div class="transit">🚇 西面站(1/2号线换乘) <b>298m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">西面购物街 <b>298m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥370</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥1,109</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥427</div>
+            <div class="tt">5间共 ¥5,545</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="西面" data-price="1814" data-score="8.7" data-conv="9.35">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/174355715.jpg?k=debdc7d215d08b3507ca8ab3d335668622ac09a0fdb3478cd4048635dc10daa4&o=')">
+        <span class="rank">#19</span>
+        <span class="badge" style="background:#27ae60">8.7 很棒</span>
+        <span class="area-tag">🏙️ 西面</span>
+      </div>
+      <div class="card-body">
+        <h3>Browndot Business Seomyeon</h3>
+        <div class="meta">⭐⭐⭐ · 699条评价</div>
+        <div class="transit">🚇 西面站(1/2号线换乘) <b>468m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">西面购物街 <b>468m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥605</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥1,814</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥698</div>
+            <div class="tt">5间共 ¥9,070</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card " data-area="海云台" data-price="2594" data-score="8.6" data-conv="9.3">
+      <div class="card-img" style="background-image:url('https://cf.bstatic.com/xdata/images/hotel/square500/612096703.jpg?k=91617e62611502d08bcb4e86e6d57190ab8b703834a63e4987c4e27965cbe046&o=')">
+        <span class="rank">#20</span>
+        <span class="badge" style="background:#27ae60">8.6 很棒</span>
+        <span class="area-tag">🏖️ 海云台</span>
+      </div>
+      <div class="card-body">
+        <h3>Haeundae Lamer Stay</h3>
+        <div class="meta">⭐⭐⭐ · 173条评价</div>
+        <div class="transit">🚇 海云台站(2号线) <b>267m</b></div>
+        <div class="attr-list">
+          <div class="attr-label">🚶 步行可达景点：</div>
+          <div class="attr-chips"><span class="attr-chip">海云台海滩 <b>379m</b></span></div>
+        </div>
+        <div class="price-row">
+          <div>
+            <span class="price">¥865</span><span class="unit">/晚</span>
+            <div class="pt">3晚 ¥2,594</div>
+          </div>
+          <div class="team">
+            <div class="tpp">👥 人均 ¥998</div>
+            <div class="tt">5间共 ¥12,970</div>
+          </div>
+        </div>
+      </div>
+    </div></div>
+
+<div class="ft">
+  📊 <b>便利度算法</b>：步行1.5km内景点数×3 + 地铁站500m内×2 + 评分×0.5<br>
+  🗺️ 覆盖景点：海云台海滩 · 广安里海滩 · 甘川文化村 · 海东龙宫寺 · 太宗台 · 札嘎其市场 · 西面购物街 · BIFF广场 · 蓝线公园 · 龙头山公园 · 新世界百货<br>
+  数据来源：Booking.com · 🐣 Miumiu 为灏灏精选 · 2026.04.20
+</div>
+
+<script>
+function fil(){const a=document.getElementById('fA').value;document.querySelectorAll('.card').forEach(c=>{c.style.display=(!a||c.dataset.area===a)?'':'none'})}
+function srt(t,b){document.querySelectorAll('.sb').forEach(x=>x.classList.remove('on'));b.classList.add('on');const g=document.getElementById('g'),cs=[...g.children];cs.sort((a,b)=>{if(t==='conv')return parseFloat(b.dataset.conv)-parseFloat(a.dataset.conv);if(t==='score')return b.dataset.score-a.dataset.score;return a.dataset.price-b.dataset.price});cs.forEach(c=>g.appendChild(c))}
+</script>
+</body>
+</html>

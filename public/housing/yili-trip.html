@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>伊犁11日环线行程</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #1a1a2e; color: #eee; min-height: 100vh; }
+
+/* Header */
+.header { 
+  background: linear-gradient(135deg, #16213e, #0f3460); 
+  padding: 24px 20px; text-align: center; 
+  position: relative; overflow: hidden;
+}
+.header::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(233,116,42,0.1) 0%, transparent 50%);
+  animation: pulse 4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
+.header h1 { font-size: 22px; position: relative; z-index: 1; }
+.header p { font-size: 12px; opacity: 0.7; margin-top: 6px; position: relative; z-index: 1; }
+
+/* Main layout */
+.main { display: flex; max-width: 1200px; margin: 0 auto; min-height: calc(100vh - 80px); }
+
+/* Left panel */
+.left { flex: 1; padding: 16px; overflow-y: auto; max-height: calc(100vh - 80px); border-right: 1px solid rgba(255,255,255,0.06); }
+
+/* Right panel */
+.right { width: 380px; padding: 16px; overflow-y: auto; max-height: calc(100vh - 80px); }
+
+/* Cards */
+.card {
+  background: linear-gradient(145deg, #16213e, #1a1a2e);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 16px; margin-bottom: 12px;
+}
+
+/* Plan header */
+.plan-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.plan-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 800; color: white;
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+.plan-title { font-size: 15px; font-weight: 700; }
+.plan-sub { font-size: 11px; color: #888; margin-top: 2px; }
+
+/* Route map */
+.route-map { width: 100%; border-radius: 10px; margin-bottom: 14px; }
+
+/* Stats mini */
+.stats-mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px; }
+.stat-item { 
+  text-align: center; padding: 8px 2px; 
+  background: rgba(255,255,255,0.03); border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.stat-val { font-size: 16px; font-weight: 800; color: #e8742a; }
+.stat-lbl { font-size: 9px; color: #666; margin-top: 2px; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before { 
+  content: ''; position: absolute; left: 9px; top: 0; bottom: 0; 
+  width: 2px; background: linear-gradient(to bottom, #e8742a, #9b59b6, #3498db);
+  border-radius: 2px;
+}
+.day-item { 
+  position: relative; margin-bottom: 8px; padding: 8px 12px;
+  background: rgba(255,255,255,0.02); border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.04);
+  animation: slideIn 0.3s ease forwards; opacity: 0;
+}
+@keyframes slideIn { to{opacity:1;transform:translateX(0)} from{opacity:0;transform:translateX(-8px)} }
+.day-item:nth-child(1){animation-delay:0.03s} .day-item:nth-child(2){animation-delay:0.06s}
+.day-item:nth-child(3){animation-delay:0.09s} .day-item:nth-child(4){animation-delay:0.12s}
+.day-item:nth-child(5){animation-delay:0.15s} .day-item:nth-child(6){animation-delay:0.18s}
+.day-item:nth-child(7){animation-delay:0.21s} .day-item:nth-child(8){animation-delay:0.24s}
+.day-item:nth-child(9){animation-delay:0.27s} .day-item:nth-child(10){animation-delay:0.3s}
+.day-item:nth-child(11){animation-delay:0.33s}
+.day-dot {
+  position: absolute; left: -20px; top: 12px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #e8742a; border: 2px solid #1a1a2e;
+}
+.day-dot.rest { background: #27ae60; }
+.day-dot.heavy { background: #e74c3c; animation: glow 2s infinite; }
+@keyframes glow { 0%,100%{box-shadow:0 0 3px #e74c3c} 50%{box-shadow:0 0 10px #e74c3c} }
+.day-num { font-size: 11px; font-weight: 700; color: #e8742a; }
+.day-route { font-size: 12px; margin-top: 2px; line-height: 1.4; }
+.day-km { font-size: 10px; color: #888; margin-top: 2px; }
+.day-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 6px; margin-top: 6px; opacity: 0.9; transition: opacity 0.3s, transform 0.3s; }
+.day-img:hover { opacity: 1; transform: scale(1.02); }
+.day-imgs { display: flex; gap: 4px; margin-top: 6px; }
+.day-imgs img { flex:1; aspect-ratio: 4/3; object-fit: cover; border-radius: 6px; opacity: 0.9; transition: opacity 0.3s; }
+.day-imgs img:hover { opacity: 1; }
+.day-km .heavy { color: #e74c3c; font-weight: 600; }
+.day-km .light { color: #27ae60; }
+
+/* Right panel sections */
+.section-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #ccc; }
+
+/* Chart */
+.chart-wrap { background: rgba(255,255,255,0.03); border-radius: 10px; padding: 12px; }
+canvas { width: 100%; height: 220px; }
+
+/* Recommend */
+.recommend { 
+  background: linear-gradient(135deg, rgba(155,89,182,0.12), rgba(232,116,42,0.08));
+  border: 1px solid rgba(155,89,182,0.25); border-radius: 10px; 
+  padding: 12px; margin-top: 12px;
+}
+.recommend h3 { color: #e8742a; font-size: 13px; margin-bottom: 6px; }
+.recommend p { font-size: 11px; color: #aaa; line-height: 1.7; }
+
+/* Mobile */
+@media (max-width: 900px) {
+  .main { flex-direction: column; }
+  .left { max-height: none; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .right { width: 100%; max-height: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🐣 新疆伊犁环线</h1>
+  <p>11天 · 7/4–7/14 · 顺时针 · 带老人小孩舒适版</p>
+</div>
+
+<div class="main">
+
+<!-- Left: Itinerary -->
+<div class="left">
+  <div class="card">
+    <div class="plan-header">
+      <div class="plan-icon">B</div>
+      <div><div class="plan-title">顺时针 · 乌市进→伊宁出 ⭐</div><div class="plan-sub">机票 ¥5350/人（¥2560+¥2790）</div></div>
+    </div>
+    <img src="yili-route-map.png" class="route-map" alt="顺时针路线图">
+    <div class="stats-mini">
+      <div class="stat-item"><div class="stat-val">1436</div><div class="stat-lbl">总公里</div></div>
+      <div class="stat-item"><div class="stat-val">24.5h</div><div class="stat-lbl">总驾驶</div></div>
+      <div class="stat-item"><div class="stat-val">373</div><div class="stat-lbl">最累km</div></div>
+      <div class="stat-item"><div class="stat-val">1天</div><div class="stat-lbl">超300km</div></div>
+    </div>
+    <div class="timeline">
+      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D1 · 7/4 周六</div><div class="day-route">上海虹桥14:20 ✈️ 乌鲁木齐19:30，休整</div><div class="day-km"><span class="light">✈️ 落地</span></div><img class="day-img" src="img-wulumuqi.png"></div>
+      <div class="day-item"><div class="day-dot"></div><div class="day-num">D2 · 7/5 周日</div><div class="day-route">乌市 → 🔴S101百里丹霞 → 🏜️安集海 → 奎屯</div><div class="day-km">248km / 3h</div><div class="day-imgs"><img src="img-danxia.png"><img src="img-anjihai.png"></div></div>
+      <div class="day-item"><div class="day-dot"></div><div class="day-num">D3 · 7/6 周一</div><div class="day-route">奎屯 → 🛣️独库公路全程 → 🌿那拉提</div><div class="day-km">270km / 5.5h</div><div class="day-imgs"><img src="img-duku.png"><img src="img-nalati.png"></div></div>
+      <div class="day-item"><div class="day-dot"></div><div class="day-num">D4 · 7/7 周二</div><div class="day-route">🌿 那拉提全天 → 晚上到唐布拉营地</div><div class="day-km">102km / 1.8h</div><img class="day-img" src="img-nalati.png"></div>
+      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D5 · 7/8 周三</div><div class="day-route">🏞️ 百里画廊 + 唐布拉 + 🍯蜂蜜（孟克特待定）</div><div class="day-km"><span class="light">~50km · 走走停停</span></div><img class="day-img" src="img-tangbula.png"></div>
+      <div class="day-item"><div class="day-dot"></div><div class="day-num">D6 · 7/9 周四</div><div class="day-route">唐布拉 → 76团 🏠 婆婆的故乡</div><div class="day-km">236km / 3.7h</div><img class="day-img" src="img-76tuan.jpg"></div>
+      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D7 · 7/10 周五</div><div class="day-route">🌻 76团全天 🏠</div><div class="day-km"><span class="light">0km · 纯休息</span></div><img class="day-img" src="img-76scenery.png"></div>
+      <div class="day-item"><div class="day-dot heavy"></div><div class="day-num">D8 · 7/11 周六</div><div class="day-route">76团 → 伊昭公路 → 伊宁 → 果子沟 → 💎赛里木湖营地</div><div class="day-km"><span class="heavy">373km / 5h ⚠️ 最累</span></div><div class="day-imgs"><img src="img-yizhao.png"><img src="img-guozigou.png"></div></div>
+      <div class="day-item"><div class="day-dot"></div><div class="day-num">D9 · 7/12 周日</div><div class="day-route">💎 赛里木湖全天（环湖+日出）→ 伊宁</div><div class="day-km">157km / 2.4h</div><img class="day-img" src="img-sailimu.png"></div>
+      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D10 · 7/13 周一</div><div class="day-route">🏙️ 伊宁全天（喀赞其+六星街）</div><div class="day-km"><span class="light">0km · 纯休息</span></div><img class="day-img" src="img-yining.png"></div>
+      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D11 · 7/14 周二</div><div class="day-route">伊宁16:40 ✈️ 浦东22:05</div><div class="day-km"><span class="light">✈️ 回家</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Right: Chart + Info -->
+<div class="right">
+  <div class="card">
+    <div class="section-title">📈 每日驾驶强度</div>
+    <div class="chart-wrap">
+      <canvas id="chart"></canvas>
+    </div>
+  </div>
+
+  <div class="recommend">
+    <h3>🐣 为什么选顺时针？</h3>
+    <p>
+      ✅ 后程越走越轻松（后3天：157+0+✈️）<br>
+      ✅ 独库公路全程270km完整体验<br>
+      ✅ 只有1天超300km，无连续赶路日<br>
+      ✅ 总里程最短（1436km）<br>
+      ✅ 适合带老人小孩的节奏
+    </p>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <div class="section-title">❌ 为什么不选伊宁进出？</div>
+    <p style="font-size:11px;color:#aaa;line-height:1.8;">
+      伊进伊出看似方便（同一机场），但问题很大：<br>
+      • <strong>独库公路走不了</strong> — 伊进伊出要走独库必须原路往返600km+<br>
+      • <strong>大量回头路</strong> — 伊宁→那拉提→独库→再回伊宁，等于跑两遍<br>
+      • <strong>S101百里丹霞去不了</strong> — 在乌鲁木齐和独山子之间，伊进伊出完全不经过<br>
+      • <strong>总里程反而更长</strong> — 绕路导致1600km+，比环线多200km<br>
+      • 唯一优势是同机场省心，但机票反而更贵（约¥6000/人）
+    </p>
+  </div>
+</div>
+
+</div><!-- .main -->
+
+<script>
+function drawChart() {
+  const canvas = document.getElementById('chart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = 220 * dpr;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = '220px';
+  ctx.scale(dpr, dpr);
+
+  const w = rect.width, h = 220;
+  const pad = {top:20, right:10, bottom:40, left:35};
+  const chartW = w - pad.left - pad.right;
+  const chartH = h - pad.top - pad.bottom;
+
+  const data = [0, 248, 270, 102, 50, 236, 0, 373, 157, 0, 0];
+  const maxVal = 420;
+  const days = 11;
+
+  function x(i) { return pad.left + (i / (days-1)) * chartW; }
+  function y(v) { return pad.top + (1 - v/maxVal) * chartH; }
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
+  for (let v = 0; v <= maxVal; v += 100) {
+    ctx.beginPath(); ctx.moveTo(pad.left, y(v)); ctx.lineTo(w-pad.right, y(v)); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.font = '9px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText(v, pad.left-4, y(v)+3);
+  }
+
+  // 200km line
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(pad.left, y(200)); ctx.lineTo(w-pad.right, y(200)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '9px sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('200km', w-pad.right+2, y(200)+3);
+
+  // Area
+  ctx.beginPath(); ctx.moveTo(x(0), y(0));
+  for(let i=0;i<data.length;i++) ctx.lineTo(x(i), y(data[i]));
+  ctx.lineTo(x(data.length-1), y(0)); ctx.closePath();
+  const grad = ctx.createLinearGradient(0, pad.top, 0, h-pad.bottom);
+  grad.addColorStop(0, 'rgba(155,89,182,0.25)');
+  grad.addColorStop(1, 'rgba(155,89,182,0)');
+  ctx.fillStyle = grad; ctx.fill();
+
+  // Line
+  ctx.strokeStyle = '#9b59b6'; ctx.lineWidth = 3;
+  ctx.shadowColor = 'rgba(155,89,182,0.5)'; ctx.shadowBlur = 8;
+  ctx.beginPath();
+  for(let i=0;i<data.length;i++) { if(i===0) ctx.moveTo(x(i),y(data[i])); else ctx.lineTo(x(i),y(data[i])); }
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Points + labels
+  ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center';
+  for(let i=0;i<data.length;i++) {
+    ctx.beginPath(); ctx.arc(x(i),y(data[i]), 5, 0, Math.PI*2);
+    ctx.fillStyle = data[i] >= 300 ? '#e74c3c' : data[i] === 0 ? '#27ae60' : '#9b59b6';
+    ctx.fill();
+    ctx.strokeStyle = '#1a1a2e'; ctx.lineWidth = 2; ctx.stroke();
+    if(data[i]>0) {
+      ctx.fillStyle = data[i] >= 300 ? '#e74c3c' : '#bbb';
+      ctx.fillText(data[i]+'km', x(i), y(data[i])-12);
+    }
+  }
+
+  // X labels
+  ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+  for(let i=0;i<days;i++) ctx.fillText('D'+(i+1), x(i), h-pad.bottom+16);
+}
+
+window.addEventListener('load', () => setTimeout(drawChart, 200));
+window.addEventListener('resize', drawChart);
+</script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🇰🇷 釜山景点攻略 · 团建版</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5}
+.hdr{background:linear-gradient(135deg,#ee5a24,#f0932b,#f6e58d);color:#fff;padding:28px 20px;text-align:center}
+.hdr h1{font-size:24px;text-shadow:0 2px 4px rgba(0,0,0,.2)}
+.hdr .sub{font-size:13px;opacity:.9;margin-top:4px}
+.tags{display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap}
+.tags span{background:rgba(255,255,255,.2);padding:5px 14px;border-radius:20px;font-size:11px}
+
+.bar{background:#fff;padding:10px 20px;display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.bar select{padding:6px 10px;border:1px solid #ddd;border-radius:8px;font-size:12px}
+.fb{padding:6px 14px;border:1px solid #ddd;border-radius:8px;font-size:12px;background:#fff;cursor:pointer;transition:.2s}
+.fb:hover{background:#fff5f0}
+.fb.on{background:#ee5a24;color:#fff;border-color:#ee5a24}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:18px;padding:18px;max-width:1200px;margin:0 auto}
+
+.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.06);transition:.3s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.card-img{height:220px;background-size:cover;background-position:center;position:relative}
+.cat-tag{position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:4px 12px;border-radius:8px;backdrop-filter:blur(4px)}
+.must-tag{position:absolute;top:12px;right:12px;background:#ee5a24;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px}
+
+.card-body{padding:14px 16px 18px}
+.card-body h3{font-size:17px;font-weight:700;color:#222}
+.name-kr{font-size:12px;color:#999;margin:2px 0 6px}
+.stars{font-size:13px;color:#f0932b;margin-bottom:8px}
+.desc{font-size:13px;color:#444;line-height:1.7;margin-bottom:12px}
+
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.info-item{background:#f8f9fa;padding:8px 10px;border-radius:8px;font-size:12px;color:#333}
+.info-item.full{grid-column:1/-1}
+.info-label{display:block;font-size:10px;color:#888;margin-bottom:2px}
+
+.tips{font-size:11px;color:#666;background:#fff8f0;padding:8px 12px;border-radius:8px;border-left:3px solid #f0932b;line-height:1.6}
+
+.ft{text-align:center;padding:24px;font-size:11px;color:#999}
+
+@media(max-width:768px){.grid{grid-template-columns:1fr;padding:12px}.card-img{height:180px}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <h1>🇰🇷 釜山景点攻略</h1>
+  <div class="sub">13人团建 · 6.26-29 · 3天玩遍釜山</div>
+  <div class="tags">
+    <span>🏖️ 海滩</span><span>🎨 打卡</span><span>🐟 美食</span><span>⛩️ 寺庙</span><span>🛍️ 购物</span><span>🌊 自然</span>
+  </div>
+</div>
+
+<div class="bar">
+  <select id="fA" onchange="fil()">
+    <option value="">全部区域</option>
+    <option value="南浦洞">🚉 南浦洞</option>
+    <option value="海云台">🏖️ 海云台</option>
+    <option value="广安里">🌊 广安里</option>
+    <option value="西面">🏙️ 西面</option>
+    <option value="影岛">🏝️ 影岛</option>
+  </select>
+  <button class="fb on" onclick="filM('all',this)">全部</button>
+  <button class="fb" onclick="filM('must',this)">🔥 必去</button>
+</div>
+
+<div class="grid" id="g">
+    <div class="card" data-area="海云台" data-cat="海滩">
+      <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Haeundae_beach%2C_Busan%2C_South_Korea.jpg/1280px-Haeundae_beach%2C_Busan%2C_South_Korea.jpg')">
+        <span class="cat-tag">🏖️ 海滩</span>
+        <span class="must-tag">🔥 必去</span>
+      </div>
+      <div class="card-body">
+        <h3>🏖️ 海云台海滩</h3>
+        <div class="name-kr">해운대해수욕장</div>
+        <div class="stars">★★★★½ 4.5</div>
+        <p class="desc">釜山最著名海滩，夏天超热闹！沙滩派对、海鲜街、夜市一条龙。团建拍大合照的绝佳地点。</p>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">⏱️ 游玩时间</span><span>2-3小时</span></div>
+          <div class="info-item"><span class="info-label">💰 费用</span><span>免费</span></div>
+          <div class="info-item full"><span class="info-label">🚇 交通</span><span>地铁2号线 海云台站 步行5分钟</span></div>
+        </div>
+        <div class="tips">💡 6月底水温适合下海 · 海滩旁有换衣/淋浴设施 · 晚上沙滩酒吧氛围绝了</div>
+      </div>
+    </div>
+    <div class="card" data-area="南浦洞" data-cat="拍照打卡">
+      <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Gamcheon_Culture_Village_Busan.png/1280px-Gamcheon_Culture_Village_Busan.png')">
+        <span class="cat-tag">🎨 拍照打卡</span>
+        <span class="must-tag">🔥 必去</span>
+      </div>
+      <div class="card-body">
+        <h3>🎨 甘川文化村</h3>
+        <div class="name-kr">감천문화마을</div>
+        <div class="stars">★★★★½ 4.7</div>
+        <p class="desc">"韩国的圣托里尼"，彩色房屋层叠在山坡上，壁画、雕塑、咖啡馆遍布巷弄。小王子雕塑是必拍点！</p>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">⏱️ 游玩时间</span><span>2-3小时</span></div>
+          <div class="info-item"><span class="info-label">💰 费用</span><span>免费（集章地图₩2,000）</span></div>
+          <div class="info-item full"><span class="info-label">🚇 交通</span><span>地铁1号线 土城站 → 坐公交15分钟</span></div>
+        </div>
+        <div class="tips">💡 建议上午去（光线好拍照）· 穿舒适鞋（坡路多）· 盖章集章活动很有趣</div>
+      </div>
+    </div>
+    <div class="card" data-area="南浦洞" data-cat="美食">
+      <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Jagalchi_Market_Busan.jpg/1280px-Jagalchi_Market_Busan.jpg')">
+        <span class="cat-tag">🐟 美食</span>
+        <span class="must-tag">🔥 必去</span>
+      </div>
+      <div class="card-body">
+        <h3>🐟 札嘎其海鲜市场</h3>
+        <div class="name-kr">자갈치시장</div>
+        <div class="stars">★★★★½ 4.4</div>
+        <p class="desc">韩国最大的海鲜市场！一楼挑海鲜，二楼现场加工。帝王蟹、生鱼片、海胆、鲍鱼应有尽有。13人团建聚餐圣地！</p>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">⏱️ 游玩时间</span><span>1.5-2小时</span></div>
+          <div class="info-item"><span class="info-label">💰 费用</span><span>人均 ¥100-300</span></div>
+          <div class="info-item full"><span class="info-label">🚇 交通</span><span>地铁1号线 札嘎其站 步行3分钟</span></div>
+        </div>
+        <div class="tips">💡 一楼买二楼吃，记得砍价 · 帝王蟹约₩50,000-80,000/只 · 加工费另算</div>
+      </div>
+    </div>
+    <div class="card" data-area="南浦洞" data-cat="购物/小吃">
+      <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/BIFF_Square_in_Nampo-dong%2C_Busan.jpg/1280px-BIFF_Square_in_Nampo-dong%2C_Busan.jpg')">
+        <span class="cat-tag">🎬 购物/小吃</span>
+        <span class="must-tag">🔥 必去</span>
+      </div>
+      <div class="card-body">
+        <h3>🎬 BIFF广场 + 国际市场</h3>
+        <div class="name-kr">BIFF광장 / 국제시장</div>
+        <div class="stars">★★★★½ 4.3</div>
+        <p class="desc">釜山电影节发源地，地面嵌有明星手印。旁边国际市场是街头小吃天堂——糖饼(₩1,000)、鱼糕、辣炒年糕、红豆刨冰。</p>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">⏱️ 游玩时间</span><span>1.5-2小时</span></div>
+          <div class="info-item"><span class="info-label">💰 费用</span><span>小吃人均 ¥30-50</span></div>
+          <div class="info-item full"><span class="info-label">🚇 交通</span><span>地铁1号线 札嘎其站 步行5分钟</span></div>
+        </div>
+        <div class="tips">💡 糖饼摊排队的那家最好吃 · 国际市场2楼有复古怀旧街 · 晚上比白天热闹</div>
+      </div>
+    </div>
+    <div class="card" data-area="南浦洞" data-cat="观景">
+      <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Busan_Tower_at_night.jpg/800px-Busan_Tower_at_night.jpg')">
+        <span class="cat-tag">🗼 观景</span>
+        
+      </div>
+      <div class="card-body">
+        <h3>🗼 龙头山公园 + 釜山塔</h3>
+        <div class="name-kr">용두산공원 / 부산타워</div>
+        <div class="stars">★★★★½ 4.3</div>
+        <p class="desc">釜山标志性地标，120米高的釜山塔可360°俯瞰港口和城市。公园免费，塔门票便宜。夜景超美！</p>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">⏱️ 游玩时间</span><span>1-1.5小时</span></div>
+          <div class="info-item"><span class="info-label">💰 费用</span><span>公园免费 / 塔 ₩12,000</span></div>
+          <div class="info-item full"><span class="info-label">🚇 交通</span><span>地铁1号线 南浦站 步行10分钟</span></div>
+        </div>
+        <div class="tips">💡 坐自动扶梯上山很方便 · 夜景比白天更震撼 · 塔上有爱情锁</div>
+      </div>
+    </div>
+    <div class="card" data-area="海云台周边" data-cat="寺庙">
+      <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Korea-Busan-Haedong_Yunggungsa-06.jpg/1280px-Korea-Busan-Haedong_Yunggungsa-06.jpg')">
+        <span class="cat-tag">⛩️ 寺庙</span>
+        <span class="must-tag">🔥 必去</span>
+      </div>
+      <div class="card-body">
+        <h3>⛩️ 海东龙宫寺</h3>
+        <div class="name-kr">해동용궁사</div>
+        <div class="stars">★★★★½ 4.6</div>
+        <p class="desc">韩国唯一建在海边悬崖上的寺庙，波浪拍打岩石超壮观。十二生肖石像、108阶台阶、许愿石塔。拍照绝美！</p>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">⏱️ 游玩时间</span><span>1.5-2小时</span></div>
+          <div class="info-item"><span class="info-label">💰 费用</span><span>免费</span></div>
+          <div class="info-item full"><span class="info-label">🚇 交通</span><span>海云台站坐公交181路 约30分钟</span></div>
+        </div>
+        <div class="tips">💡 建议早上去（人少+日出方向）· 从海云台打车约20分钟 · 寺内可以求签</div>
+      </div>
+    </div>
+    <div class="card" data-area="广安里" data-cat="海滩/夜景">
+      <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Gwangan_Bridge_Night_View.jpg/1280px-Gwangan_Bridge_Night_View.jpg')">
+        <span class="cat-tag">🌉 海滩/夜景</span>
+        
+      </div>
+      <div class="card-body">
+        <h3>🌉 广安里海滩 + 广安大桥</h3>
+        <div class="name-kr">광안리해수욕장</div>
+        <div class="stars">★★★★½ 4.5</div>
+        <p class="desc">比海云台更本地化的海滩，晚上广安大桥灯光秀超浪漫。沿海咖啡厅和酒吧一条街，团建夜生活好去处。</p>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">⏱️ 游玩时间</span><span>2-3小时</span></div>
+          <div class="info-item"><span class="info-label">💰 费用</span><span>免费</span></div>
+          <div class="info-item full"><span class="info-label">🚇 交通</span><span>地铁2号线 广安站 步行10分钟</span></div>
+        </div>
+        <div class="tips">💡 晚上看大桥灯光比白天好10倍 · 沙滩上有街头表演 · 比海云台人少</div>
+      </div>
+    </div>
+    <div class="card" data-area="影岛" data-cat="自然风光">
+      <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Taejongdae_Busan.jpg/1280px-Taejongdae_Busan.jpg')">
+        <span class="cat-tag">🌊 自然风光</span>
+        
+      </div>
+      <div class="card-body">
+        <h3>🌊 太宗台</h3>
+        <div class="name-kr">태종대</div>
+        <div class="stars">★★★★½ 4.5</div>
+        <p class="desc">断崖、灯塔、松林、无敌海景！坐Danubi小火车轻松游览，可以看到日本对马岛。釜山自然风光No.1。</p>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">⏱️ 游玩时间</span><span>2-3小时</span></div>
+          <div class="info-item"><span class="info-label">💰 费用</span><span>免费入园 / 列车₩3,000</span></div>
+          <div class="info-item full"><span class="info-label">🚇 交通</span><span>南浦站坐公交66/88路 约40分钟</span></div>
+        </div>
+        <div class="tips">💡 坐Danubi观光列车(₩3,000) · 天气好能看到对马岛 · 下面有游船码头</div>
+      </div>
+    </div>
+    <div class="card" data-area="南浦洞" data-cat="特色体验">
+      <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Yeongdo_Bridge.JPG/1280px-Yeongdo_Bridge.JPG')">
+        <span class="cat-tag">🌉 特色体验</span>
+        
+      </div>
+      <div class="card-body">
+        <h3>🌉 影岛大桥</h3>
+        <div class="name-kr">영도대교</div>
+        <div class="stars">★★★★ 4.0</div>
+        <p class="desc">韩国唯一的开合桥！每天下午2点准时开桥，桥面升起让船通过，围观群众超多，很壮观的表演。</p>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">⏱️ 游玩时间</span><span>30分钟</span></div>
+          <div class="info-item"><span class="info-label">💰 费用</span><span>免费</span></div>
+          <div class="info-item full"><span class="info-label">🚇 交通</span><span>地铁1号线 南浦站 步行10分钟</span></div>
+        </div>
+        <div class="tips">💡 每天14:00开桥（约15分钟）· 提前到桥边占好位置 · 从札嘎其步行5分钟</div>
+      </div>
+    </div>
+    <div class="card" data-area="海云台" data-cat="体验">
+      <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Haeundae_Blue_Line_Park_Beach_Train.jpg/1280px-Haeundae_Blue_Line_Park_Beach_Train.jpg')">
+        <span class="cat-tag">🚂 体验</span>
+        <span class="must-tag">🔥 必去</span>
+      </div>
+      <div class="card-body">
+        <h3>🚂 海云台蓝线公园</h3>
+        <div class="name-kr">해운대 블루라인파크</div>
+        <div class="stars">★★★★½ 4.6</div>
+        <p class="desc">废弃铁路改造的海景观光列车+天空胶囊！沿海岸线行驶，窗外就是大海。Sky Capsule超出片，团建必体验！</p>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">⏱️ 游玩时间</span><span>1-2小时</span></div>
+          <div class="info-item"><span class="info-label">💰 费用</span><span>海滨列车₩7,000 / Sky Capsule₩35,000</span></div>
+          <div class="info-item full"><span class="info-label">🚇 交通</span><span>地铁2号线 海云台站 → 步行至尾浦站</span></div>
+        </div>
+        <div class="tips">💡 Sky Capsule需要提前预约（超热门）· 海滨列车不用预约 · 终点站是松亭海滩</div>
+      </div>
+    </div>
+    <div class="card" data-area="西面" data-cat="购物/美食">
+      <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Seomyeon%2C_Busan.jpg/1280px-Seomyeon%2C_Busan.jpg')">
+        <span class="cat-tag">🛍️ 购物/美食</span>
+        
+      </div>
+      <div class="card-body">
+        <h3>🛍️ 西面购物街</h3>
+        <div class="name-kr">서면</div>
+        <div class="stars">★★★★½ 4.2</div>
+        <p class="desc">釜山最大商圈，地下商街+品牌店+烤肉一条街。西面猪肉汤饭一条街是当地人最爱，团建晚餐好选择！</p>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">⏱️ 游玩时间</span><span>2-3小时</span></div>
+          <div class="info-item"><span class="info-label">💰 费用</span><span>丰俭由人</span></div>
+          <div class="info-item full"><span class="info-label">🚇 交通</span><span>地铁1/2号线 西面站（换乘站）</span></div>
+        </div>
+        <div class="tips">💡 田浦咖啡街文艺打卡 · 西面猪肉汤饭₩8,000超便宜 · 地下商街砍价空间大</div>
+      </div>
+    </div>
+    <div class="card" data-area="Centum City" data-cat="购物/温泉">
+      <div class="card-img" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Shinsegae_Department_Store_Centum_City_01.jpg/1280px-Shinsegae_Department_Store_Centum_City_01.jpg')">
+        <span class="cat-tag">🏬 购物/温泉</span>
+        
+      </div>
+      <div class="card-body">
+        <h3>🏬 新世界百货 Centum City</h3>
+        <div class="name-kr">신세계 센텀시티</div>
+        <div class="stars">★★★★½ 4.4</div>
+        <p class="desc">吉尼斯世界纪录最大百货商场！内含SPA LAND温泉（团建泡汤超棒），还有溜冰场、电影院。下雨天备选方案。</p>
+        <div class="info-grid">
+          <div class="info-item"><span class="info-label">⏱️ 游玩时间</span><span>3-4小时</span></div>
+          <div class="info-item"><span class="info-label">💰 费用</span><span>SPA ₩18,000 / 购物另算</span></div>
+          <div class="info-item full"><span class="info-label">🚇 交通</span><span>地铁2号线 Centum City站 直达</span></div>
+        </div>
+        <div class="tips">💡 SPA LAND门票₩18,000（含汗蒸）· 周末人很多 · B1美食街性价比高</div>
+      </div>
+    </div></div>
+
+<div class="ft">🐣 Miumiu 为灏灏的釜山团建整理 · 2026.04.20</div>
+
+<script>
+let mustOnly=false;
+function fil(){
+  const a=document.getElementById('fA').value;
+  document.querySelectorAll('.card').forEach(c=>{
+    const areaOk=!a||c.dataset.area===a;
+    const mustOk=!mustOnly||c.querySelector('.must-tag');
+    c.style.display=(areaOk&&mustOk)?'':'none';
+  });
+}
+function filM(t,b){
+  document.querySelectorAll('.fb').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  mustOnly=(t==='must');
+  fil();
+}
+</script>
+</body>
+</html>

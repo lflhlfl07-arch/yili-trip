@@ -1,0 +1,70 @@
+baseURL = "http://20.243.162.151:8090/hub/"
+languageCode = "zh-cn"
+title = "灏灏的小世界 🌸"
+theme = "PaperMod"
+defaultContentLanguage = "zh-cn"
+
+[params]
+  description = "旅游 · 美食 · 房产 · 生活 · 故事"
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+  defaultTheme = "auto"
+  
+  [params.homeInfoParams]
+    Title = "灏灏的小世界 🌸"
+    Content = "记录生活中的美好 — 美食 · 旅行 · 房产 · 穿搭 · 故事"
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "#"
+
+[menu]
+  [[menu.main]]
+    name = "🏠 首页"
+    url = "/"
+    weight = 1
+
+  [[menu.main]]
+    name = "📒 日记"
+    url = "/categories/miumiu-日记/"
+    weight = 2
+
+  [[menu.main]]
+    name = "🍜 美食"
+    url = "/categories/美食攻略/"
+    weight = 3
+
+  [[menu.main]]
+    name = "🗺️ 旅游"
+    url = "/categories/旅游攻略/"
+    weight = 4
+
+  [[menu.main]]
+    name = "🏡 房产"
+    url = "/categories/苏州房产/"
+    weight = 5
+
+  [[menu.main]]
+    name = "📖 故事书"
+    url = "/categories/右右故事书/"
+    weight = 6
+
+  [[menu.main]]
+    name = "关于"
+    url = "/about/"
+    weight = 7
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[outputs]
+  home = ["HTML", "RSS"]

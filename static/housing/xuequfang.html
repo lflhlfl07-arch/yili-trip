@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>园区学区房地图 🎓🏡</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f0f2f5; height: 100vh; overflow: hidden; }
+        .header { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; }
+        .header h1 { font-size: 18px; }
+        .header .sub { font-size: 11px; opacity: 0.8; }
+        .nav { display: flex; gap: 6px; }
+        .nav a { color: white; text-decoration: none; font-size: 12px; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 6px; }
+        .nav a:hover { background: rgba(255,255,255,0.35); }
+        .main { display: flex; height: calc(100vh - 48px); }
+        .left { flex: 1; position: relative; }
+        #map { width: 100%; height: 100%; }
+        .right { width: 400px; background: white; border-left: 1px solid #e8e8e8; display: flex; flex-direction: column; overflow: hidden; }
+        .panel-header { padding: 14px 16px; border-bottom: 1px solid #f0f0f0; }
+        .panel-header h2 { font-size: 16px; color: #333; }
+        .panel-header .desc { font-size: 11px; color: #999; margin-top: 3px; }
+        .panel-body { flex: 1; overflow-y: auto; padding: 8px; }
+
+        .district-card { margin: 6px 0; padding: 14px; background: #fff; border-radius: 12px; border-left: 5px solid; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+        .district-card:hover { transform: translateX(3px); box-shadow: 0 3px 12px rgba(0,0,0,0.1); }
+        .district-card.active { box-shadow: 0 3px 16px rgba(0,0,0,0.15); }
+        .dc-head { display: flex; justify-content: space-between; align-items: center; }
+        .dc-name { font-size: 15px; font-weight: 700; color: #333; }
+        .dc-tier { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+        .dc-tier.t0 { background: #e8f0fe; color: #3498db; }
+        .dc-tier.t1 { background: #fde8e8; color: #e74c3c; }
+        .dc-tier.t2 { background: #fff8e1; color: #f1c40f; }
+        .dc-schools { font-size: 12px; color: #666; margin: 6px 0; }
+        .dc-tags { display: flex; gap: 4px; flex-wrap: wrap; margin: 6px 0; }
+        .dc-tag { font-size: 10px; padding: 2px 6px; border-radius: 6px; background: #f0f4ff; color: #5b7cfa; }
+        .dc-price { display: flex; justify-content: space-between; align-items: center; padding-top: 6px; border-top: 1px solid #f5f5f5; font-size: 12px; }
+        .dc-price .min { color: #e74c3c; font-weight: 700; font-size: 14px; }
+        .dc-price .range { color: #999; }
+
+        .detail-view { display: none; }
+        .detail-view.show { display: block; }
+        .detail-back { padding: 10px 16px; font-size: 12px; color: #3498db; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
+        .detail-back:hover { background: #f8f9ff; }
+        .detail-info { padding: 16px; }
+        .detail-title { font-size: 20px; font-weight: 800; color: #333; }
+        .detail-subtitle { font-size: 12px; color: #999; margin: 4px 0 12px; }
+        .detail-section { margin-bottom: 16px; }
+        .detail-section h4 { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 2px solid #f0f0f0; }
+
+        .community-row { padding: 10px 12px; border-radius: 8px; margin: 4px 0; background: #fafbff; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.15s; }
+        .community-row:hover { background: #f0f4ff; transform: translateX(2px); }
+        .cr-name { font-size: 13px; font-weight: 600; color: #333; }
+        .cr-sub { font-size: 11px; color: #999; margin-top: 2px; }
+        .cr-price { font-size: 16px; font-weight: 800; color: #e74c3c; }
+        .cr-price span { font-size: 11px; font-weight: 400; color: #999; }
+
+        .recommend-box { margin: 12px 0; padding: 14px; background: linear-gradient(135deg, #f8f9ff, #eef2ff); border-radius: 10px; border: 1px solid #e0e8ff; }
+        .recommend-box h4 { font-size: 13px; color: #3498db; margin-bottom: 8px; }
+        .recommend-box p { font-size: 12px; color: #555; line-height: 1.6; }
+
+        .legend { position: absolute; bottom: 14px; left: 10px; background: rgba(255,255,255,0.95); padding: 10px 14px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); font-size: 11px; z-index: 200; }
+        .legend .li { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+        .legend .dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
+        .budget-filter { position: absolute; top: 10px; left: 10px; z-index: 200; background: white; padding: 8px 14px; border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.12); display: flex; gap: 8px; align-items: center; }
+        .budget-filter label { font-size: 12px; color: #666; }
+        .budget-filter select { padding: 5px 8px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px; }
+        .budget-filter .btn { padding: 5px 12px; background: #3498db; color: white; border: none; border-radius: 6px; font-size: 11px; cursor: pointer; }
+        .budget-filter .btn:hover { background: #2980b9; }
+        .budget-filter .btn.active { background: #e74c3c; }
+
+        @media (max-width: 768px) {
+            .main { flex-direction: column; }
+            .left { height: 40vh; }
+            .right { width: 100%; height: 60vh; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div>
+        <h1>🎓 园区学区房地图</h1>
+        <div class="sub">灏灏看房参考 · 学区 + 房价 + 对口小区</div>
+    </div>
+    <div class="nav">
+        <a href="index.html">🏡 房产</a>
+        <a href="schools.html">📋 全部学校</a>
+    </div>
+</div>
+
+<div class="main">
+    <div class="left">
+        <div class="budget-filter">
+            <label>💰 预算</label>
+            <select id="budgetFilter" onchange="filterByBudget()">
+                <option value="0" selected>不限</option>
+                <option value="200">200万内</option>
+                <option value="300">300万内</option>
+                <option value="400">400万内</option>
+                <option value="500">500万内</option>
+                <option value="600">600万内</option>
+                <option value="800">800万内</option>
+                <option value="1000">1000万内</option>
+                <option value="1500">1500万内</option>
+            </select>
+            <label>梯队</label>
+            <select id="tierFilter" onchange="filterByBudget()">
+                <option value="0">全部</option>
+                <option value="1">⭐ 一梯队</option>
+                <option value="2">🌟 二梯队</option>
+            </select>
+            <button class="btn" id="btnRecommend" onclick="toggleRecommend()">🐣 Miumiu推荐</button>
+        </div>
+        <div id="map"></div>
+        <div class="legend">
+            <div style="font-weight:700;margin-bottom:4px;">学区</div>
+            <div class="li"><span class="dot" style="background:#e74c3c"></span> 星海</div>
+            <div class="li"><span class="dot" style="background:#f39c12"></span> 星湾</div>
+            <div class="li"><span class="dot" style="background:#27ae60"></span> 景城</div>
+            <div class="li"><span class="dot" style="background:#3498db"></span> 西附(二实小)</div>
+            <div class="li"><span class="dot" style="background:#8e44ad"></span> 西附(星洲)</div>
+            <div class="li"><span class="dot" style="background:#e67e22"></span> 金鸡湖</div>
+            <div class="li"><span class="dot" style="background:#1abc9c"></span> 人大附中</div>
+            <div class="li" style="margin-top:4px;color:#999;">⭐ = 一梯队</div>
+        </div>
+    </div>
+
+    <div class="right">
+        <div id="listView">
+            <div class="panel-header">
+                <h2>🏫 园区学区一览</h2>
+                <div class="desc">点击查看学区详情和对口小区</div>
+            </div>
+            <div class="panel-body" id="districtList"></div>
+        </div>
+        <div class="detail-view" id="detailView">
+            <div class="detail-back" onclick="backToList()">← 返回列表</div>
+            <div class="panel-body">
+                <div class="detail-info" id="detailContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="district-data.js"></script>
+<script src="district-boundaries.js"></script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=34313b0bdd617b52b0cf727d17522f82"></script>
+<script>
+// 高德官方地图
+const amap = new AMap.Map('map', {
+    center: [120.71, 31.31],
+    zoom: 13,
+    viewMode: '2D',
+    features: ['bg', 'road', 'building', 'point'],
+});
+
+// 启用地铁图层
+amap.add(new AMap.TileLayer());
+
+// 梯队标签颜色：一梯队红，二梯队黄，其他蓝
+function tierTag(t, full) {
+    const cfg = {
+        1: { bg: '#fde8e8', color: '#e74c3c', short: '⭐一', long: '⭐一梯队' },
+        2: { bg: '#fff8e1', color: '#daa520', short: '二', long: '二梯队' },
+    };
+    const def = { bg: '#e8f0fe', color: '#3498db', short: '其他', long: '人大附属' };
+    const c = cfg[t] || def;
+    const text = full ? c.long : c.short;
+    const sz = full ? '10px' : '9px';
+    const pad = full ? '2px 6px' : '1px 4px';
+    const rad = full ? '8px' : '4px';
+    const fw = full ? 'font-weight:600;' : '';
+    return `<span style="font-size:${sz};padding:${pad};border-radius:${rad};background:${c.bg};color:${c.color};${fw}">${text}</span>`;
+}
+
+let amapMarkers = [];
+let amapPolygons = [];
+let showRecommend = false;
+
+function clearMarkers() {
+    amapMarkers.forEach(m => amap.remove(m));
+    amapMarkers = [];
+    amapPolygons.forEach(p => amap.remove(p));
+    amapPolygons = [];
+}
+
+function renderAll() {
+    const budget = parseInt(document.getElementById('budgetFilter').value);
+    const tier = parseInt(document.getElementById('tierFilter').value);
+    clearMarkers();
+
+    const filtered = SCHOOL_DISTRICT_DATA.filter(d => {
+        if (tier && d.tier !== tier) return false;
+        if (budget && d.minPrice > budget) return false;
+        return true;
+    });
+
+    filtered.forEach(d => {
+        // 学区范围多边形
+        const boundary = DISTRICT_BOUNDARIES[d.name];
+        if (boundary) {
+            const polygon = new AMap.Polygon({
+                path: boundary.map(p => new AMap.LngLat(p[0], p[1])),
+                strokeColor: d.color,
+                strokeWeight: 2.5,
+                strokeOpacity: 0.8,
+                strokeStyle: 'dashed',
+                fillColor: d.color,
+                fillOpacity: 0.12,
+                zIndex: 50,
+                cursor: 'pointer',
+            });
+            polygon.on('click', () => showDetail(d.name));
+            amap.add(polygon);
+            amapPolygons.push(polygon);
+        }
+        // 学校标记
+        const schoolMarker = new AMap.Marker({
+            position: [d.schoolLng, d.schoolLat],
+            content: `<div style="font-size:22px;cursor:pointer;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.3));">🏫</div>`,
+            offset: new AMap.Pixel(-11, -11),
+            zIndex: 110,
+        });
+        schoolMarker.on('click', () => showDetail(d.name));
+        amap.add(schoolMarker);
+        amapMarkers.push(schoolMarker);
+
+        // 学区名标签
+        const label = new AMap.Marker({
+            position: [d.schoolLng, d.schoolLat],
+            content: `<div style="font-size:12px;font-weight:800;color:${d.color};text-shadow:1px 1px 3px white,-1px -1px 3px white,1px -1px 3px white,-1px 1px 3px white,0 0 8px white;white-space:nowrap;cursor:pointer;text-align:center;pointer-events:auto;">
+                ${d.tier === 1 ? '⭐ ' : ''}${d.name}<br>
+                <span style="font-size:11px;font-weight:700;color:#e74c3c;">${d.minPrice}万起</span>
+            </div>`,
+            offset: new AMap.Pixel(-60, -45),
+            zIndex: 100,
+        });
+        label.on('click', () => showDetail(d.name));
+        amap.add(label);
+        amapMarkers.push(label);
+
+        // 小区圆点
+        d.communities.forEach(c => {
+            if (budget && c.price > budget) return;
+            const cm = new AMap.CircleMarker({
+                center: [c.lng, c.lat],
+                radius: 8,
+                strokeColor: '#fff',
+                strokeWeight: 2,
+                fillColor: d.color,
+                fillOpacity: 0.9,
+                zIndex: 90,
+                cursor: 'pointer',
+            });
+            cm.on('click', () => showDetail(d.name));
+            cm.on('mouseover', function() {
+                const infoWindow = new AMap.InfoWindow({
+                    content: `<div style="padding:6px;font-size:12px;"><b>${c.name}</b><br>${c.price}万 · ${c.area}</div>`,
+                    offset: new AMap.Pixel(0, -10),
+                });
+                infoWindow.open(amap, [c.lng, c.lat]);
+                cm._iw = infoWindow;
+            });
+            cm.on('mouseout', function() { if (cm._iw) cm._iw.close(); });
+            amap.add(cm);
+            amapMarkers.push(cm);
+        });
+    });
+
+    renderList(filtered);
+}
+
+function renderList(data) {
+    const sorted = [...data].sort((a, b) => {
+        if (showRecommend) {
+            const rec = ['景城学区', '星湾学区', '西附学区（星洲）', '西附学区（二实小）', '星海学区', '金鸡湖学区', '人大附中学区', '星港学区', '东沙湖学区'];
+            return rec.indexOf(a.name) - rec.indexOf(b.name);
+        }
+        return a.tier - b.tier || a.minPrice - b.minPrice;
+    });
+
+    document.getElementById('districtList').innerHTML = sorted.map(d => `
+        <div class="district-card" style="border-color:${d.color};" onclick="showDetail('${d.name}')">
+            <div class="dc-head">
+                <span class="dc-name">${d.name}</span>
+                <span class="dc-tier t${d.tier}">${d.tier === 0 ? '🏠 灏灏看过' : d.tier === 1 ? '⭐ 一梯队' : '🌟 二梯队'}</span>
+            </div>
+            <div class="dc-schools">🎒 ${d.primary} ${tierTag(d.primaryTier||d.tier)} → 📚 ${d.middle} ${tierTag(d.middleTier||d.tier)}</div>
+            <div class="dc-tags">${d.tags.map(t => `<span class="dc-tag">${t}</span>`).join('')}</div>
+            <div class="dc-price">
+                <span><span class="min">${d.minPrice}万</span> 起</span>
+                <span class="range">${d.priceRange}</span>
+            </div>
+            ${showRecommend && ['景城学区','星湾学区'].includes(d.name) ? '<div style="margin-top:6px;font-size:11px;color:#e74c3c;font-weight:600;">👑 Miumiu 首推！</div>' : ''}
+        </div>
+    `).join('');
+}
+
+function showDetail(name) {
+    const d = SCHOOL_DISTRICT_DATA.find(x => x.name === name);
+    if (!d) return;
+
+    document.getElementById('listView').style.display = 'none';
+    document.getElementById('detailView').classList.add('show');
+
+    const budget = parseInt(document.getElementById('budgetFilter').value);
+    const communities = budget ? d.communities.filter(c => c.price <= budget) : d.communities;
+
+    document.getElementById('detailContent').innerHTML = `
+        <div class="detail-title" style="color:${d.color}">${d.name}</div>
+        <div class="detail-subtitle">
+            <span class="dc-tier t${d.tier}" style="margin-right:6px;">${d.tier === 0 ? '🏠 灏灏看过' : d.tier === 1 ? '⭐ 一梯队' : '🌟 二梯队'}</span>
+            均价约 ${(d.avgPrice/10000).toFixed(1)}万/㎡
+        </div>
+
+        <div class="detail-section">
+            <h4>🏫 对口学校</h4>
+            <div style="padding:8px 12px;background:#f8f9ff;border-radius:8px;font-size:13px;line-height:2;">
+                🎒 <b>小学：</b>${d.primary} ${tierTag(d.primaryTier||d.tier, true)}<br>
+                📚 <b>初中：</b>${d.middle} ${tierTag(d.middleTier||d.tier, true)}
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h4>💬 学区特点</h4>
+            <div style="padding:8px 12px;background:#f9f9f9;border-radius:8px;font-size:12px;color:#555;line-height:1.6;">${d.note}</div>
+            <div class="dc-tags" style="margin-top:8px;">${d.tags.map(t => `<span class="dc-tag">${t}</span>`).join('')}</div>
+        </div>
+
+        <div class="detail-section">
+            <h4>🏘️ 对口小区（${communities.length}个${budget ? '，'+budget+'万内' : ''}）</h4>
+            ${communities.length === 0 ? '<div style="color:#999;font-size:12px;padding:12px;">预算内暂无匹配小区，试试调高预算</div>' : ''}
+            ${communities.map(c => `
+                <div class="community-row">
+                    <div>
+                        <div class="cr-name">${c.name} ${c.note ? '<span style="font-size:10px;color:#3498db;">'+c.note+'</span>' : ''}</div>
+                        <div class="cr-sub">${c.area} · ${c.built}年建</div>
+                    </div>
+                    <div class="cr-price">${c.price}<span>万</span></div>
+                </div>
+            `).join('')}
+        </div>
+
+        ${d.tier <= 1 ? `
+        <div class="recommend-box">
+            <h4>🐣 Miumiu 点评</h4>
+            <p>${getComment(d.name)}</p>
+        </div>` : ''}
+    `;
+
+    amap.setZoomAndCenter(15, [d.schoolLng, d.schoolLat], false, 500);
+}
+
+function getComment(name) {
+    const comments = {
+        '星海学区': '最强但最卷！如果灏灏不怕"鸡娃"氛围，这里是园区天花板。不过 290 万起步，好房子要 400+，量力而行～',
+        '星湾学区': '我的首推之一！九年制省心，双一梯队，188万就能上车。老师负责，学习氛围好，性价比超高！',
+        '景城学区': '另一个首推！128万门槛是一梯队里最低的。不太卷，社团活动多，适合想要好学区但不想太鸡血的家庭。灏灏你懂的～',
+        '西附学区（二实小）': '初中很强（西附一梯队），小学也是一梯队，就是门槛 308 万偏高。如果预算够可以考虑！',
+        '金鸡湖学区': '九年制，重视语文，两个校区。300万起步在你预算边界，不是最优选但也不错。',
+        '人大附中学区': '灏灏实地看过的楼盘！绿城品质确实好，卫生间地砖都很高级。700万起步虽然贵，但人大附中全套学区 + 新房精装，长远来看保值。就是总价高，要量力而行哦～ 🏠',
+    };
+    return comments[name] || '学区整体实力可以，具体要看灏灏的需求～';
+}
+
+function backToList() {
+    document.getElementById('detailView').classList.remove('show');
+    document.getElementById('listView').style.display = 'block';
+    amap.setZoomAndCenter(13, [120.71, 31.31], false, 500);
+}
+
+function filterByBudget() { renderAll(); }
+
+function toggleRecommend() {
+    showRecommend = !showRecommend;
+    document.getElementById('btnRecommend').classList.toggle('active', showRecommend);
+    renderAll();
+}
+
+// 地图加载完成后渲染
+amap.on('complete', renderAll);
+</script>
+</body>
+</html>

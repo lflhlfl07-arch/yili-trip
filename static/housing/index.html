@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>苏州房产地图 🏡</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f0f2f5; height: 100vh; overflow: hidden; }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 10px 20px;
+            display: flex; align-items: center; justify-content: space-between; z-index: 1000;
+        }
+        .header h1 { font-size: 18px; }
+        .header .subtitle { font-size: 11px; opacity: 0.8; }
+        .header-right { display: flex; gap: 6px; }
+        .hbtn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        .hbtn:hover { background: rgba(255,255,255,0.35); }
+
+        .main { display: flex; height: calc(100vh - 48px); }
+
+        .left-panel { flex: 1; position: relative; }
+        #map { width: 100%; height: 100%; }
+
+        .map-filters {
+            position: absolute; top: 10px; left: 10px; z-index: 800;
+            background: white; padding: 8px 12px; border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+            display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+        }
+        .map-filters select, .map-filters input {
+            padding: 5px 8px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px; outline: none;
+        }
+
+        .right-panel {
+            width: 380px; background: white; border-left: 1px solid #e8e8e8;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .panel-tabs { display: flex; border-bottom: 1px solid #eee; }
+        .panel-tab { flex: 1; padding: 9px; text-align: center; font-size: 12px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; }
+        .panel-tab.active { color: #667eea; border-bottom-color: #667eea; font-weight: 600; }
+        .panel-content { flex: 1; overflow-y: auto; }
+
+        .list-item { padding: 10px 14px; border-bottom: 1px solid #f5f5f5; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .list-item:hover { background: #f8f9ff; }
+        .list-item.active { background: #f0f3ff; border-left: 3px solid #667eea; }
+        .list-item-name { font-size: 13px; font-weight: 600; color: #333; }
+        .list-item-sub { font-size: 11px; color: #999; margin-top: 2px; }
+        .list-item-price { font-size: 15px; font-weight: 700; color: #e74c3c; }
+        .list-item-price-unit { font-size: 10px; color: #999; }
+        .star-btn { background: none; border: none; cursor: pointer; font-size: 13px; padding: 0 3px; }
+        .compare-btn { background: none; border: 1px solid #ddd; border-radius: 4px; padding: 1px 5px; font-size: 10px; cursor: pointer; margin-left: 3px; }
+        .compare-btn.active { background: #667eea; color: white; border-color: #667eea; }
+
+        .detail-card { padding: 16px; display: none; }
+        .detail-card.show { display: block; }
+        .detail-name { font-size: 18px; font-weight: 700; color: #333; }
+        .detail-district { font-size: 12px; color: #999; margin-bottom: 12px; }
+        .detail-price-box { background: linear-gradient(135deg, #fff5f5, #ffe0e0); border-radius: 10px; padding: 14px; text-align: center; margin-bottom: 14px; }
+        .detail-price { font-size: 28px; font-weight: 800; color: #e74c3c; }
+        .detail-price-unit { font-size: 12px; color: #999; }
+        .detail-section { margin-bottom: 14px; }
+        .detail-section-title { font-size: 12px; font-weight: 600; color: #667eea; margin-bottom: 6px; border-bottom: 1px solid #f0f0f0; padding-bottom: 3px; }
+        .detail-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 12px; }
+        .detail-row .dl { color: #999; }
+        .detail-row .dv { color: #333; font-weight: 500; }
+        .school-badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 11px; margin: 2px 2px 2px 0; }
+        .school-badge.primary { background: #e8f4ff; color: #2980b9; }
+        .school-badge.middle { background: #fff3e0; color: #e67e22; }
+        .detail-note { background: #f9f9f9; padding: 8px 12px; border-radius: 6px; font-size: 12px; color: #666; line-height: 1.5; }
+
+        .placeholder { display: flex; align-items: center; justify-content: center; height: 100%; color: #ccc; font-size: 13px; text-align: center; padding: 30px; }
+
+        .compare-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .compare-table th { background: #f8f9ff; color: #667eea; padding: 6px 5px; text-align: left; font-weight: 600; border-bottom: 2px solid #667eea; }
+        .compare-table td { padding: 5px; border-bottom: 1px solid #f0f0f0; }
+        .compare-table .best { background: #e8f8e8 !important; }
+        .compare-table .worst { background: #fff5f5 !important; }
+
+        .edit-panel { padding: 14px; display: none; }
+        .edit-panel.show { display: block; }
+        .edit-panel h3 { font-size: 14px; margin-bottom: 10px; }
+        .eg { margin-bottom: 8px; }
+        .eg label { display: block; font-size: 11px; color: #999; margin-bottom: 2px; }
+        .eg input, .eg select, .eg textarea { width: 100%; padding: 6px 8px; border: 1px solid #e0e0e0; border-radius: 5px; font-size: 12px; outline: none; font-family: inherit; }
+        .eg textarea { height: 50px; resize: vertical; }
+        .edit-actions { display: flex; gap: 6px; margin-top: 10px; }
+        .btn { flex: 1; padding: 7px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-danger { background: #fee; color: #e74c3c; }
+        .btn-cancel { background: #f5f5f5; color: #666; }
+
+        .stats-strip { background: #fafafa; padding: 6px 14px; border-top: 1px solid #eee; display: flex; justify-content: space-around; font-size: 11px; }
+        .stats-strip .sv { font-weight: 700; color: #667eea; font-size: 13px; }
+        .stats-strip .sl { color: #999; font-size: 10px; }
+
+        .legend { position: absolute; bottom: 14px; left: 10px; background: rgba(255,255,255,0.95); padding: 8px 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); font-size: 11px; z-index: 800; }
+        .legend h4 { font-size: 11px; margin-bottom: 3px; }
+        .legend .li { display: flex; align-items: center; gap: 4px; margin: 1px 0; }
+        .legend .ld { width: 10px; height: 10px; border-radius: 50%; }
+
+        /* 区域信息框 */
+        .district-info {
+            position: absolute; top: 10px; right: 10px; z-index: 800;
+            background: white; padding: 12px 16px; border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.12); font-size: 12px;
+            display: none; min-width: 180px;
+        }
+        .district-info h3 { font-size: 15px; color: #333; margin-bottom: 6px; }
+        .district-info .di-row { display: flex; justify-content: space-between; padding: 3px 0; }
+        .district-info .di-label { color: #999; }
+        .district-info .di-value { font-weight: 600; color: #333; }
+
+        @media (max-width: 768px) {
+            .main { flex-direction: column; }
+            .left-panel { height: 50vh; }
+            .right-panel { width: 100%; height: 50vh; border-left: none; border-top: 1px solid #e8e8e8; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div>
+        <h1>🏡 苏州房产地图</h1>
+        <div class="subtitle">小区 · 学区 · 单价 · 区域分析</div>
+    </div>
+    <div class="header-right">
+        <a class="hbtn" href="schools.html" style="text-decoration:none;">🎓 学区</a>
+        <a class="hbtn" href="xuequfang.html" style="text-decoration:none;">🏫 学区房</a>
+        <button class="hbtn" onclick="startAdd()">➕ 添加</button>
+        <button class="hbtn" onclick="exportData()">📥 导出</button>
+        <button class="hbtn" onclick="showImport()">📤 导入</button>
+    </div>
+</div>
+
+<div class="main">
+    <div class="left-panel">
+        <div class="map-filters">
+            <select id="filterDistrict" onchange="applyFilters()">
+                <option value="all">全部区域</option>
+                <option value="园区">工业园区</option>
+                <option value="新区">高新区</option>
+                <option value="姑苏">姑苏区</option>
+                <option value="吴中">吴中区</option>
+                <option value="相城">相城区</option>
+                <option value="吴江">吴江区</option>
+            </select>
+            <select id="filterPrice" onchange="applyFilters()">
+                <option value="all">全部价格</option>
+                <option value="0-20000">2万以下</option>
+                <option value="20000-30000">2-3万</option>
+                <option value="30000-50000">3-5万</option>
+                <option value="50000-999999">5万以上</option>
+            </select>
+            <input type="text" id="searchInput" placeholder="🔍 搜小区/学校" oninput="applyFilters()" style="width:120px;" />
+        </div>
+        <div id="map"></div>
+        <div class="legend">
+            <h4>💰 价格</h4>
+            <div class="li"><span class="ld" style="background:#27ae60"></span> <2万</div>
+            <div class="li"><span class="ld" style="background:#3498db"></span> 2-3万</div>
+            <div class="li"><span class="ld" style="background:#f39c12"></span> 3-5万</div>
+            <div class="li"><span class="ld" style="background:#e74c3c"></span> 5万+</div>
+        </div>
+        <div class="district-info" id="districtInfo">
+            <h3 id="diName"></h3>
+            <div class="di-row"><span class="di-label">小区数</span><span class="di-value" id="diCount"></span></div>
+            <div class="di-row"><span class="di-label">均价</span><span class="di-value" id="diAvg"></span></div>
+            <div class="di-row"><span class="di-label">范围</span><span class="di-value" id="diRange"></span></div>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <div class="panel-tabs">
+            <div class="panel-tab active" onclick="switchTab('list')">📋 列表</div>
+            <div class="panel-tab" onclick="switchTab('detail')">📄 详情</div>
+            <div class="panel-tab" onclick="switchTab('compare')">⚖️ 对比</div>
+            <div class="panel-tab" onclick="switchTab('edit')">✏️ 编辑</div>
+        </div>
+        <div class="panel-content" id="panelContent">
+            <div id="listView"></div>
+            <div class="detail-card" id="detailView">
+                <div class="detail-name" id="dName"></div>
+                <div class="detail-district" id="dDistrict"></div>
+                <div class="detail-price-box"><div class="detail-price" id="dPrice"></div><div class="detail-price-unit">元/㎡</div></div>
+                <div class="detail-section">
+                    <div class="detail-section-title">🏠 基本信息</div>
+                    <div class="detail-row"><span class="dl">区域</span><span class="dv" id="dArea"></span></div>
+                    <div class="detail-row"><span class="dl">建成年份</span><span class="dv" id="dYear"></span></div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">🎓 学区</div>
+                    <div id="dSchools"></div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-section-title">💬 备注</div>
+                    <div class="detail-note" id="dNote"></div>
+                </div>
+                <div class="edit-actions" style="margin-top:12px;">
+                    <button class="btn btn-primary" onclick="editCurrent()">✏️ 编辑</button>
+                    <button class="btn btn-danger" onclick="deleteCurrent()">🗑️ 删除</button>
+                </div>
+            </div>
+            <div class="placeholder" id="placeholder">👈 点击地图上的小区<br>或从列表中选择</div>
+            <div id="compareView" style="display:none;padding:14px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                    <h3 style="font-size:14px;">⚖️ 小区对比</h3>
+                    <button class="btn btn-cancel" onclick="clearCompare()" style="flex:none;width:auto;padding:3px 8px;font-size:11px;">清空</button>
+                </div>
+                <div id="compareContent"></div>
+                <div id="compareEmpty" style="text-align:center;color:#ccc;padding:30px;font-size:12px;">列表中点 ⚖️ 添加<br>最多4个</div>
+            </div>
+            <div class="edit-panel" id="editView">
+                <h3 id="editTitle">添加小区</h3>
+                <div class="eg"><label>名称</label><input id="eName" /></div>
+                <div class="eg"><label>区域</label><select id="eDistrict"><option value="园区">工业园区</option><option value="新区">高新区</option><option value="姑苏">姑苏区</option><option value="吴中">吴中区</option><option value="相城">相城区</option><option value="吴江">吴江区</option></select></div>
+                <div class="eg"><label>均价 (元/㎡)</label><input id="ePrice" type="number" /></div>
+                <div class="eg"><label>建成年份</label><input id="eYear" type="number" /></div>
+                <div class="eg"><label>纬度</label><input id="eLat" type="number" step="0.0001" /></div>
+                <div class="eg"><label>经度</label><input id="eLng" type="number" step="0.0001" /></div>
+                <div class="eg"><label>对口小学</label><input id="ePrimary" /></div>
+                <div class="eg"><label>对口中学</label><input id="eMiddle" /></div>
+                <div class="eg"><label>备注</label><textarea id="eNote"></textarea></div>
+                <div style="font-size:10px;color:#aaa;margin-bottom:6px;">💡 地图上右键可自动填坐标</div>
+                <div class="edit-actions">
+                    <button class="btn btn-primary" onclick="saveEdit()">💾 保存</button>
+                    <button class="btn btn-cancel" onclick="cancelEdit()">取消</button>
+                </div>
+            </div>
+        </div>
+        <div class="stats-strip">
+            <div><div class="sv" id="stCount">0</div><div class="sl">小区数</div></div>
+            <div><div class="sv" id="stAvg">0</div><div class="sl">均价</div></div>
+            <div><div class="sv" id="stMin">0</div><div class="sl">最低</div></div>
+            <div><div class="sv" id="stMax">0</div><div class="sl">最高</div></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const STORAGE_KEY = 'suzhou_housing_v2';
+const GEOJSON_URL = 'https://geo.datav.aliyun.com/areas_v3/bound/320500_full.json';
+
+// 区域名称映射
+const DISTRICT_MAP = {
+    '虎丘区': '新区', '吴中区': '吴中', '相城区': '相城',
+    '姑苏区': '姑苏', '吴江区': '吴江', '工业园区': '园区',
+    '常熟市': null, '张家港市': null, '昆山市': null, '太仓市': null
+};
+
+// 区域颜色
+const DISTRICT_COLORS = {
+    '园区': '#667eea', '新区': '#42b983', '姑苏': '#f39c12',
+    '吴中': '#e74c3c', '相城': '#9b59b6', '吴江': '#1abc9c'
+};
+
+const defaultData = [
+    { id:1, name:"星海生活广场", district:"园区", lat:31.3040, lng:120.7140, price:42000, year:2005, primarySchool:"星海小学", middleSchool:"星海中学", note:"园区核心地段，配套成熟" },
+    { id:2, name:"东湖大郡", district:"园区", lat:31.3120, lng:120.7380, price:38000, year:2008, primarySchool:"星湾学校", middleSchool:"星湾学校", note:"湖东板块，环境优美" },
+    { id:3, name:"湖畔天城", district:"园区", lat:31.3050, lng:120.7450, price:45000, year:2010, primarySchool:"星港学校", middleSchool:"星港学校", note:"金鸡湖畔，顶级学区" },
+    { id:4, name:"翠湖雅居", district:"园区", lat:31.2980, lng:120.7200, price:35000, year:2006, primarySchool:"翠园中学附属小学", middleSchool:"园区星海中学", note:"生活便利，性价比高" },
+    { id:5, name:"中海御景湾", district:"园区", lat:31.2850, lng:120.7600, price:28000, year:2015, primarySchool:"唯亭实验小学", middleSchool:"唯亭学校", note:"唯亭板块，价格友好" },
+    { id:6, name:"名城花园", district:"新区", lat:31.3100, lng:120.5850, price:22000, year:2003, primarySchool:"新区实验小学", middleSchool:"新区实验中学", note:"新区老牌小区" },
+    { id:7, name:"狮山御园", district:"新区", lat:31.3200, lng:120.5700, price:35000, year:2016, primarySchool:"狮山实验小学", middleSchool:"新区一中", note:"狮山商务区，配套完善" },
+    { id:8, name:"中锐星奕湾", district:"新区", lat:31.2950, lng:120.5500, price:18000, year:2018, primarySchool:"科技城实验小学", middleSchool:"科技城中学", note:"科技城板块，新房较多" },
+    { id:9, name:"桐泾花园", district:"姑苏", lat:31.2980, lng:120.6100, price:25000, year:2000, primarySchool:"平江实验学校", middleSchool:"平江中学", note:"老城区，交通方便" },
+    { id:10, name:"苏州御窑金府", district:"姑苏", lat:31.3080, lng:120.6300, price:48000, year:2020, primarySchool:"善耕实验小学", middleSchool:"振华中学", note:"姑苏新盘，顶级学区" },
+    { id:11, name:"太湖黄金水岸", district:"吴中", lat:31.2500, lng:120.6000, price:20000, year:2012, primarySchool:"吴中实验小学", middleSchool:"吴中区城西中学", note:"靠近太湖，环境好" },
+    { id:12, name:"万科魅力花园", district:"吴中", lat:31.2700, lng:120.6400, price:26000, year:2010, primarySchool:"宝带实验小学", middleSchool:"城南中学", note:"万科品质，配套成熟" },
+    { id:13, name:"活力岛花园", district:"相城", lat:31.3700, lng:120.6300, price:22000, year:2015, primarySchool:"相城实验小学", middleSchool:"相城实验中学", note:"活力岛板块，发展潜力大" },
+    { id:14, name:"高铁新城花园", district:"相城", lat:31.3900, lng:120.6500, price:19000, year:2019, primarySchool:"高铁新城实验小学", middleSchool:"高铁新城中学", note:"高铁新城，交通便捷" },
+    { id:15, name:"太湖新城花园", district:"吴江", lat:31.1700, lng:120.6400, price:16000, year:2017, primarySchool:"太湖新城实验小学", middleSchool:"吴江中学", note:"吴江太湖新城，价格实惠" },
+];
+
+let communities = JSON.parse(localStorage.getItem(STORAGE_KEY)) || JSON.parse(JSON.stringify(defaultData));
+let currentId = null;
+let editingId = null;
+let currentTab = 'list';
+let allMarkers = {};
+let compareIds = new Set();
+let starIds = new Set(JSON.parse(localStorage.getItem('suzhou_stars_v2') || '[]'));
+let districtLayers = {};
+
+// ========== 地图 ==========
+const map = L.map('map', {
+    center: [31.30, 120.63],
+    zoom: 12,
+    minZoom: 10,
+    maxZoom: 18,
+    maxBounds: [[30.8, 120.0], [31.8, 121.3]]
+});
+
+// 高德地图瓦片（中文标注，国内快）
+L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+    subdomains: '1234',
+    attribution: '© 高德地图',
+    maxZoom: 18
+}).addTo(map);
+
+// 加载苏州区域边界 + 蒙层遮住苏州外区域
+fetch(GEOJSON_URL)
+    .then(r => r.json())
+    .then(geo => {
+        // 合并苏州6区的边界（排除代管县级市）
+        const suzhouCoords = [];
+        geo.features.forEach(f => {
+            const name = f.properties.name;
+            const mapped = DISTRICT_MAP[name];
+            if (mapped === null) return;
+            // 收集所有坐标用于蒙层
+            const geom = f.geometry;
+            if (geom.type === 'Polygon') {
+                suzhouCoords.push(geom.coordinates[0]);
+            } else if (geom.type === 'MultiPolygon') {
+                geom.coordinates.forEach(poly => suzhouCoords.push(poly[0]));
+            }
+        });
+
+        // 创建蒙层：一个巨大的矩形减去苏州区域 = 遮住外面
+        const outerBounds = [
+            [180, -90], [180, 90], [-180, 90], [-180, -90], [180, -90]
+        ];
+        const maskCoords = [outerBounds];
+        suzhouCoords.forEach(ring => {
+            // GeoJSON 是 [lng, lat]，Leaflet polygon 需要 [lat, lng]
+            maskCoords.push(ring.map(c => [c[1], c[0]]));
+        });
+        L.polygon(maskCoords, {
+            color: 'none',
+            fillColor: '#f0f2f5',
+            fillOpacity: 0.85,
+            interactive: false
+        }).addTo(map);
+
+        // 画各区边界
+        geo.features.forEach(f => {
+            const name = f.properties.name;
+            const mapped = DISTRICT_MAP[name];
+            if (mapped === null) return;
+            const color = DISTRICT_COLORS[mapped] || '#999';
+            const layer = L.geoJSON(f, {
+                style: {
+                    color: color,
+                    weight: 2.5,
+                    fillColor: color,
+                    fillOpacity: 0.06,
+                }
+            }).addTo(map);
+            
+            // 区域标签
+            const center = f.properties.centroid || f.properties.center;
+            if (center) {
+                L.marker([center[1], center[0]], {
+                    icon: L.divIcon({
+                        className: '',
+                        html: `<div style="font-size:14px;font-weight:800;color:${color};text-shadow:1px 1px 3px white,-1px -1px 3px white,1px -1px 3px white,-1px 1px 3px white,0 0 6px white;white-space:nowrap;pointer-events:auto;cursor:pointer;letter-spacing:2px;">${mapped === '新区' ? '高新区' : mapped + (mapped === '园区' ? '' : '区')}</div>`,
+                        iconSize: [90, 22], iconAnchor: [45, 11]
+                    }),
+                    interactive: true
+                }).addTo(map).on('click', () => {
+                    document.getElementById('filterDistrict').value = mapped;
+                    applyFilters();
+                    showDistrictInfo(mapped);
+                });
+            }
+            
+            layer.on('click', () => {
+                document.getElementById('filterDistrict').value = mapped;
+                applyFilters();
+                showDistrictInfo(mapped);
+            });
+            
+            layer.on('mouseover', () => layer.setStyle({ fillOpacity: 0.18, weight: 3 }));
+            layer.on('mouseout', () => layer.setStyle({ fillOpacity: 0.06, weight: 2.5 }));
+            
+            districtLayers[mapped] = layer;
+        });
+    });
+
+function showDistrictInfo(district) {
+    const items = communities.filter(c => c.district === district);
+    const box = document.getElementById('districtInfo');
+    if (items.length === 0) { box.style.display = 'none'; return; }
+    const prices = items.map(c => c.price);
+    document.getElementById('diName').textContent = (district === '新区' ? '高新区' : district + (district === '园区' ? '' : '区'));
+    document.getElementById('diCount').textContent = items.length + ' 个';
+    document.getElementById('diAvg').textContent = (Math.round(prices.reduce((a,b)=>a+b,0)/prices.length)/10000).toFixed(1) + ' 万/㎡';
+    document.getElementById('diRange').textContent = (Math.min(...prices)/10000).toFixed(1) + ' - ' + (Math.max(...prices)/10000).toFixed(1) + ' 万';
+    box.style.display = 'block';
+    setTimeout(() => { box.style.display = 'none'; }, 5000);
+}
+
+map.on('contextmenu', function(e) {
+    document.getElementById('eLat').value = e.latlng.lat.toFixed(4);
+    document.getElementById('eLng').value = e.latlng.lng.toFixed(4);
+    if (currentTab !== 'edit') switchTab('edit');
+});
+
+function getPriceColor(p) {
+    if (p >= 50000) return '#e74c3c';
+    if (p >= 30000) return '#f39c12';
+    if (p >= 20000) return '#3498db';
+    return '#27ae60';
+}
+
+function renderMap(data) {
+    Object.values(allMarkers).forEach(m => map.removeLayer(m));
+    allMarkers = {};
+    data.forEach(c => {
+        const color = getPriceColor(c.price);
+        const icon = L.divIcon({
+            className: '',
+            html: `<div style="background:${color};color:white;padding:2px 6px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,0.3);border:1.5px solid white;text-align:center;cursor:pointer;">${c.name.length>4?c.name.slice(0,4)+'…':c.name} ${(c.price/10000).toFixed(1)}万</div>`,
+            iconSize: [90, 20], iconAnchor: [45, 10]
+        });
+        const m = L.marker([c.lat, c.lng], { icon }).addTo(map);
+        m.on('click', () => selectCommunity(c.id));
+        allMarkers[c.id] = m;
+    });
+}
+
+// ========== 面板 ==========
+function switchTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.panel-tab').forEach((t,i) => t.classList.toggle('active', ['list','detail','compare','edit'][i]===tab));
+    document.getElementById('listView').style.display = tab==='list'?'block':'none';
+    document.getElementById('detailView').style.display = tab==='detail'&&currentId?'flex':'none';
+    document.getElementById('detailView').style.flexDirection='column';
+    document.getElementById('placeholder').style.display = tab==='detail'&&!currentId?'flex':'none';
+    document.getElementById('compareView').style.display = tab==='compare'?'block':'none';
+    document.getElementById('editView').style.display = tab==='edit'?'block':'none';
+    if(tab==='detail'&&currentId) showDetail(currentId);
+    if(tab==='list') renderList();
+    if(tab==='compare') renderCompare();
+}
+
+function renderList() {
+    const data = getFiltered();
+    const sorted = [...data].sort((a,b) => (starIds.has(b.id)?1:0)-(starIds.has(a.id)?1:0) || a.price-b.price);
+    document.getElementById('listView').innerHTML = sorted.map(c => `
+        <div class="list-item ${c.id===currentId?'active':''}" onclick="selectCommunity(${c.id})">
+            <div style="flex:1;min-width:0;">
+                <div class="list-item-name">
+                    <button class="star-btn" onclick="event.stopPropagation();toggleStar(${c.id})">${starIds.has(c.id)?'⭐':'☆'}</button>
+                    ${c.name}
+                    <button class="compare-btn ${compareIds.has(c.id)?'active':''}" onclick="event.stopPropagation();toggleCompare(${c.id})">⚖️</button>
+                </div>
+                <div class="list-item-sub">${c.district} · ${c.year}年 · ${c.primarySchool}</div>
+            </div>
+            <div style="text-align:right;"><div class="list-item-price">${(c.price/10000).toFixed(1)}<span class="list-item-price-unit">万</span></div></div>
+        </div>
+    `).join('');
+    updateStats(data);
+}
+
+function selectCommunity(id) {
+    currentId = id;
+    switchTab('detail');
+    const c = communities.find(x=>x.id===id);
+    if(c) map.setView([c.lat,c.lng], 15, {animate:true});
+}
+
+function showDetail(id) {
+    const c = communities.find(x=>x.id===id);
+    if(!c) return;
+    document.getElementById('dName').textContent = c.name;
+    document.getElementById('dDistrict').textContent = c.district + ' · ' + c.year + '年';
+    document.getElementById('dPrice').textContent = c.price.toLocaleString();
+    document.getElementById('dArea').textContent = c.district;
+    document.getElementById('dYear').textContent = c.year + '年';
+    document.getElementById('dSchools').innerHTML = `<span class="school-badge primary">🎒 ${c.primarySchool}</span><span class="school-badge middle">📚 ${c.middleSchool}</span>`;
+    document.getElementById('dNote').textContent = c.note || '暂无';
+}
+
+// ========== 收藏 & 对比 ==========
+function toggleStar(id) { starIds.has(id)?starIds.delete(id):starIds.add(id); localStorage.setItem('suzhou_stars_v2',JSON.stringify([...starIds])); renderList(); }
+function toggleCompare(id) { if(compareIds.has(id)){compareIds.delete(id);}else{if(compareIds.size>=4){alert('最多4个');return;}compareIds.add(id);} renderList(); }
+function clearCompare() { compareIds.clear(); renderCompare(); renderList(); }
+function renderCompare() {
+    const items = communities.filter(c=>compareIds.has(c.id));
+    const ct = document.getElementById('compareContent'), em = document.getElementById('compareEmpty');
+    if(!items.length){ct.innerHTML='';em.style.display='block';return;}
+    em.style.display='none';
+    const minP=Math.min(...items.map(c=>c.price)), maxP=Math.max(...items.map(c=>c.price));
+    const fields=[{l:'区域',f:c=>c.district},{l:'均价',f:c=>c.price.toLocaleString()+'元',best:c=>c.price===minP,worst:c=>c.price===maxP},{l:'建成',f:c=>c.year+'年'},{l:'小学',f:c=>c.primarySchool},{l:'中学',f:c=>c.middleSchool},{l:'备注',f:c=>c.note||'-'}];
+    let h='<table class="compare-table"><thead><tr><th></th>';
+    items.forEach(c=>{h+=`<th>${c.name}</th>`;});h+='</tr></thead><tbody>';
+    fields.forEach(f=>{h+='<tr><td style="color:#999;">'+f.l+'</td>';items.forEach(c=>{let cls='';if(f.best&&f.best(c))cls='best';if(f.worst&&f.worst(c))cls='worst';h+=`<td class="${cls}">${f.f(c)}</td>`;});h+='</tr>';});
+    h+='</tbody></table>';
+    h+='<div style="margin-top:12px;padding:10px;background:#f8f9ff;border-radius:6px;font-size:11px;"><b>💡</b> 最低价: <b>'+items.find(c=>c.price===minP).name+'</b> ('+((minP/10000).toFixed(1))+'万)</div>';
+    ct.innerHTML=h;
+}
+
+// ========== 编辑 ==========
+function startAdd() { editingId=null; document.getElementById('editTitle').textContent='➕ 添加小区'; ['eName','ePrice','eYear','eLat','eLng','ePrimary','eMiddle','eNote'].forEach(id=>document.getElementById(id).value=''); switchTab('edit'); }
+function editCurrent() { const c=communities.find(x=>x.id===currentId); if(!c)return; editingId=c.id; document.getElementById('editTitle').textContent='✏️ '+c.name; document.getElementById('eName').value=c.name; document.getElementById('eDistrict').value=c.district; document.getElementById('ePrice').value=c.price; document.getElementById('eYear').value=c.year; document.getElementById('eLat').value=c.lat; document.getElementById('eLng').value=c.lng; document.getElementById('ePrimary').value=c.primarySchool; document.getElementById('eMiddle').value=c.middleSchool; document.getElementById('eNote').value=c.note; switchTab('edit'); }
+function saveEdit() {
+    const o={name:document.getElementById('eName').value.trim(),district:document.getElementById('eDistrict').value,price:parseInt(document.getElementById('ePrice').value)||0,year:parseInt(document.getElementById('eYear').value)||2024,lat:parseFloat(document.getElementById('eLat').value)||31.3,lng:parseFloat(document.getElementById('eLng').value)||120.65,primarySchool:document.getElementById('ePrimary').value.trim()||'待补充',middleSchool:document.getElementById('eMiddle').value.trim()||'待补充',note:document.getElementById('eNote').value.trim()};
+    if(!o.name){alert('请填名称');return;}
+    if(editingId){const i=communities.findIndex(x=>x.id===editingId);if(i>=0)communities[i]={...communities[i],...o};currentId=editingId;}else{o.id=Date.now();communities.push(o);currentId=o.id;}
+    saveData();applyFilters();switchTab('detail');
+}
+function deleteCurrent() { if(!currentId)return; const c=communities.find(x=>x.id===currentId); if(!confirm('删除「'+c.name+'」？'))return; communities=communities.filter(x=>x.id!==currentId); currentId=null; saveData(); applyFilters(); switchTab('list'); }
+function cancelEdit() { switchTab(currentId?'detail':'list'); }
+
+// ========== 筛选 ==========
+function getFiltered() {
+    const d=document.getElementById('filterDistrict').value, p=document.getElementById('filterPrice').value, s=document.getElementById('searchInput').value.trim().toLowerCase();
+    return communities.filter(c => {
+        if(d!=='all'&&c.district!==d) return false;
+        if(p!=='all'){const[min,max]=p.split('-').map(Number);if(c.price<min||c.price>=max)return false;}
+        if(s&&!c.name.toLowerCase().includes(s)&&!c.primarySchool.toLowerCase().includes(s)&&!c.middleSchool.toLowerCase().includes(s)) return false;
+        return true;
+    });
+}
+function applyFilters() { const d=getFiltered(); renderMap(d); renderList(); updateStats(d); }
+function updateStats(data) {
+    const p=data.map(c=>c.price);
+    document.getElementById('stCount').textContent=data.length;
+    document.getElementById('stAvg').textContent=data.length?(Math.round(p.reduce((a,b)=>a+b,0)/p.length)/10000).toFixed(1)+'万':'0';
+    document.getElementById('stMin').textContent=data.length?(Math.min(...p)/10000).toFixed(1)+'万':'0';
+    document.getElementById('stMax').textContent=data.length?(Math.max(...p)/10000).toFixed(1)+'万':'0';
+}
+
+// ========== 数据 ==========
+function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(communities));}
+function exportData(){const b=new Blob([JSON.stringify(communities,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='suzhou-housing.json';a.click();}
+function showImport(){const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=e=>{const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(Array.isArray(d)){communities=d;saveData();applyFilters();alert('导入 '+d.length+' 个小区');}}catch(e){alert('格式不对');}};r.readAsText(e.target.files[0]);};i.click();}
+
+// ========== 初始化 ==========
+applyFilters();
+switchTab('list');
+</script>
+</body>
+</html>
