@@ -51,7 +51,7 @@ body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 .plan-sub { font-size: 11px; color: #888; margin-top: 2px; }
 
 /* Route map */
-.route-map { width: 100%; border-radius: 10px; margin-bottom: 14px; }
+.route-map { width: 100%; max-width: 320px; border-radius: 10px; margin: 0 auto 14px; display: block; }
 
 /* Stats mini */
 .stats-mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px; }
@@ -94,10 +94,10 @@ body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 .day-num { font-size: 11px; font-weight: 700; color: #e8742a; }
 .day-route { font-size: 12px; margin-top: 2px; line-height: 1.4; }
 .day-km { font-size: 10px; color: #888; margin-top: 2px; }
-.day-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 6px; margin-top: 6px; opacity: 0.9; transition: opacity 0.3s, transform 0.3s; }
-.day-img:hover { opacity: 1; transform: scale(1.02); }
-.day-imgs { display: flex; gap: 4px; margin-top: 6px; }
-.day-imgs img { flex:1; aspect-ratio: 4/3; object-fit: cover; border-radius: 6px; opacity: 0.9; transition: opacity 0.3s; }
+.day-img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; margin-top: 6px; opacity: 0.85; transition: opacity 0.3s, transform 0.3s; float: right; margin-left: 8px; }
+.day-img:hover { opacity: 1; transform: scale(1.05); }
+.day-imgs { display: flex; gap: 4px; margin-top: 6px; justify-content: flex-end; }
+.day-imgs img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; opacity: 0.85; transition: opacity 0.3s; }
 .day-imgs img:hover { opacity: 1; }
 .day-km .heavy { color: #e74c3c; font-weight: 600; }
 .day-km .light { color: #27ae60; }
