@@ -47,8 +47,8 @@ body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   font-size: 17px; font-weight: 800; color: white;
   background: linear-gradient(135deg, #9b59b6, #8e44ad);
 }
-.plan-title { font-size: 15px; font-weight: 700; }
-.plan-sub { font-size: 11px; color: #888; margin-top: 2px; }
+.plan-title { font-size: 17px; font-weight: 700; }
+.plan-sub { font-size: 13px; color: #888; margin-top: 2px; }
 
 /* Route map */
 .route-map { width: 100%; max-width: 320px; border-radius: 10px; margin: 0 auto 14px; display: block; }
@@ -60,8 +60,8 @@ body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   background: rgba(255,255,255,0.03); border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.05);
 }
-.stat-val { font-size: 16px; font-weight: 800; color: #e8742a; }
-.stat-lbl { font-size: 9px; color: #666; margin-top: 2px; }
+.stat-val { font-size: 18px; font-weight: 800; color: #e8742a; }
+.stat-lbl { font-size: 11px; color: #666; margin-top: 2px; }
 
 /* Timeline */
 .timeline { position: relative; padding-left: 24px; }
@@ -91,19 +91,19 @@ body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 .day-dot.rest { background: #27ae60; }
 .day-dot.heavy { background: #e74c3c; animation: glow 2s infinite; }
 @keyframes glow { 0%,100%{box-shadow:0 0 3px #e74c3c} 50%{box-shadow:0 0 10px #e74c3c} }
-.day-num { font-size: 11px; font-weight: 700; color: #e8742a; }
-.day-route { font-size: 12px; margin-top: 2px; line-height: 1.4; }
-.day-km { font-size: 10px; color: #888; margin-top: 2px; }
-.day-img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; margin-top: 6px; opacity: 0.85; transition: opacity 0.3s, transform 0.3s; float: right; margin-left: 8px; }
+.day-num { font-size: 14px; font-weight: 700; color: #e8742a; }
+.day-route { font-size: 15px; margin-top: 4px; line-height: 1.5; }
+.day-km { font-size: 13px; color: #888; margin-top: 3px; }
+.day-img { width: 100px; height: 70px; object-fit: cover; border-radius: 6px; margin-top: 6px; opacity: 0.85; transition: opacity 0.3s, transform 0.3s; }
 .day-img:hover { opacity: 1; transform: scale(1.05); }
-.day-imgs { display: flex; gap: 4px; margin-top: 6px; justify-content: flex-end; }
-.day-imgs img { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; opacity: 0.85; transition: opacity 0.3s; }
+.day-imgs { display: flex; gap: 6px; margin-top: 6px; }
+.day-imgs img { width: 100px; height: 70px; object-fit: cover; border-radius: 6px; opacity: 0.85; transition: opacity 0.3s; }
 .day-imgs img:hover { opacity: 1; }
 .day-km .heavy { color: #e74c3c; font-weight: 600; }
 .day-km .light { color: #27ae60; }
 
 /* Right panel sections */
-.section-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #ccc; }
+.section-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: #ccc; }
 
 /* Chart */
 .chart-wrap { background: rgba(255,255,255,0.03); border-radius: 10px; padding: 12px; }
@@ -115,13 +115,13 @@ canvas { width: 100%; height: 220px; }
   border: 1px solid rgba(155,89,182,0.25); border-radius: 10px; 
   padding: 12px; margin-top: 12px;
 }
-.recommend h3 { color: #e8742a; font-size: 13px; margin-bottom: 6px; }
-.recommend p { font-size: 11px; color: #aaa; line-height: 1.7; }
+.recommend h3 { color: #e8742a; font-size: 15px; margin-bottom: 6px; }
+.recommend p { font-size: 13px; color: #aaa; line-height: 1.7; }
 
 /* Day tags */
 .day-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
 .day-tag {
-  font-size: 9px; padding: 2px 6px; border-radius: 4px;
+  font-size: 11px; padding: 3px 8px; border-radius: 4px;
   display: inline-flex; align-items: center; gap: 2px; font-weight: 600;
 }
 .tag-alt { background: rgba(26,188,156,0.15); color: #1abc9c; }
@@ -131,8 +131,8 @@ canvas { width: 100%; height: 220px; }
 
 /* Tips cards */
 .tips-card { margin-top: 12px; }
-.tips-card h3 { font-size: 13px; margin-bottom: 8px; color: #e8742a; }
-.tips-card p, .tips-card ul { font-size: 11px; color: #aaa; line-height: 1.8; }
+.tips-card h3 { font-size: 15px; margin-bottom: 8px; color: #e8742a; }
+.tips-card p, .tips-card ul { font-size: 13px; color: #aaa; line-height: 1.8; }
 .tips-card ul { list-style: none; padding: 0; }
 .tips-card li::before { content: '• '; color: #e8742a; }
 
