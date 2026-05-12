@@ -51,7 +51,11 @@ body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 .plan-sub { font-size: 13px; color: #888; margin-top: 2px; }
 
 /* Route map */
-.route-map { width: 100%; max-width: 320px; border-radius: 10px; margin: 0 auto 14px; display: block; }
+.route-map { width: 100%; max-width: 100%; border-radius: 10px; margin: 0 auto 14px; display: block; cursor: zoom-in; transition: transform 0.3s; }
+.route-map:hover { transform: scale(1.02); }
+.route-map.zoomed { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(1); max-width: 95vw; max-height: 90vh; z-index: 9999; cursor: zoom-out; border-radius: 8px; box-shadow: 0 0 60px rgba(0,0,0,0.8); }
+.route-map.zoomed:hover { transform: translate(-50%,-50%) scale(1); }
+.map-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 9998; }
 
 /* Stats mini */
 .stats-mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px; }
@@ -162,7 +166,8 @@ canvas { width: 100%; height: 220px; }
       <div class="plan-icon">🗺️</div>
       <div><div class="plan-title">顺时针 · 乌市进→伊宁出</div><div class="plan-sub">13天 · 机票 ¥5350/人（¥2560+¥2790）</div></div>
     </div>
-    <img src="yili-route-map.png" class="route-map" alt="顺时针路线图">
+    <div id="mapOverlay" class="map-overlay"></div>
+    <img src="yili-route-map.png" class="route-map" id="routeMap" alt="顺时针路线图" onclick="toggleMapZoom()">
     <div class="stats-mini">
       <div class="stat-item"><div class="stat-val">1423</div><div class="stat-lbl">总公里</div></div>
       <div class="stat-item"><div class="stat-val">22h</div><div class="stat-lbl">总驾驶</div></div>
@@ -470,6 +475,19 @@ function drawAltChart() {
   ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
   for(let i=0;i<days;i++) ctx.fillText('D'+(i+1), x(i), h-pad.bottom+16);
 }
+
+function toggleMapZoom() {
+  const map = document.getElementById('routeMap');
+  const overlay = document.getElementById('mapOverlay');
+  if (map.classList.contains('zoomed')) {
+    map.classList.remove('zoomed');
+    overlay.style.display = 'none';
+  } else {
+    map.classList.add('zoomed');
+    overlay.style.display = 'block';
+  }
+}
+document.getElementById('mapOverlay').addEventListener('click', toggleMapZoom);
 
 window.addEventListener('load', () => setTimeout(() => { drawChart(); drawAltChart(); }, 200));
 window.addEventListener('resize', () => { drawChart(); drawAltChart(); });
