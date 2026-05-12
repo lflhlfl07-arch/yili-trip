@@ -47,11 +47,11 @@ body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   font-size: 17px; font-weight: 800; color: white;
   background: linear-gradient(135deg, #9b59b6, #8e44ad);
 }
-.plan-title { font-size: 15px; font-weight: 700; }
-.plan-sub { font-size: 11px; color: #888; margin-top: 2px; }
+.plan-title { font-size: 17px; font-weight: 700; }
+.plan-sub { font-size: 13px; color: #888; margin-top: 2px; }
 
 /* Route map */
-.route-map { width: 100%; border-radius: 10px; margin-bottom: 14px; }
+.route-map { width: 100%; max-width: 320px; border-radius: 10px; margin: 0 auto 14px; display: block; }
 
 /* Stats mini */
 .stats-mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px; }
@@ -60,8 +60,8 @@ body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   background: rgba(255,255,255,0.03); border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.05);
 }
-.stat-val { font-size: 16px; font-weight: 800; color: #e8742a; }
-.stat-lbl { font-size: 9px; color: #666; margin-top: 2px; }
+.stat-val { font-size: 18px; font-weight: 800; color: #e8742a; }
+.stat-lbl { font-size: 11px; color: #666; margin-top: 2px; }
 
 /* Timeline */
 .timeline { position: relative; padding-left: 24px; }
@@ -83,6 +83,8 @@ body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 .day-item:nth-child(7){animation-delay:0.21s} .day-item:nth-child(8){animation-delay:0.24s}
 .day-item:nth-child(9){animation-delay:0.27s} .day-item:nth-child(10){animation-delay:0.3s}
 .day-item:nth-child(11){animation-delay:0.33s}
+.day-item:nth-child(12){animation-delay:0.36s}
+.day-item:nth-child(13){animation-delay:0.39s}
 .day-dot {
   position: absolute; left: -20px; top: 12px;
   width: 12px; height: 12px; border-radius: 50%;
@@ -91,19 +93,19 @@ body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
 .day-dot.rest { background: #27ae60; }
 .day-dot.heavy { background: #e74c3c; animation: glow 2s infinite; }
 @keyframes glow { 0%,100%{box-shadow:0 0 3px #e74c3c} 50%{box-shadow:0 0 10px #e74c3c} }
-.day-num { font-size: 11px; font-weight: 700; color: #e8742a; }
-.day-route { font-size: 12px; margin-top: 2px; line-height: 1.4; }
-.day-km { font-size: 10px; color: #888; margin-top: 2px; }
-.day-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 6px; margin-top: 6px; opacity: 0.9; transition: opacity 0.3s, transform 0.3s; }
-.day-img:hover { opacity: 1; transform: scale(1.02); }
-.day-imgs { display: flex; gap: 4px; margin-top: 6px; }
-.day-imgs img { flex:1; aspect-ratio: 4/3; object-fit: cover; border-radius: 6px; opacity: 0.9; transition: opacity 0.3s; }
+.day-num { font-size: 14px; font-weight: 700; color: #e8742a; }
+.day-route { font-size: 15px; margin-top: 4px; line-height: 1.5; }
+.day-km { font-size: 13px; color: #888; margin-top: 3px; }
+.day-img { width: 100px; height: 70px; object-fit: cover; border-radius: 6px; margin-top: 6px; opacity: 0.85; transition: opacity 0.3s, transform 0.3s; }
+.day-img:hover { opacity: 1; transform: scale(1.05); }
+.day-imgs { display: flex; gap: 6px; margin-top: 6px; }
+.day-imgs img { width: 100px; height: 70px; object-fit: cover; border-radius: 6px; opacity: 0.85; transition: opacity 0.3s; }
 .day-imgs img:hover { opacity: 1; }
 .day-km .heavy { color: #e74c3c; font-weight: 600; }
 .day-km .light { color: #27ae60; }
 
 /* Right panel sections */
-.section-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #ccc; }
+.section-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: #ccc; }
 
 /* Chart */
 .chart-wrap { background: rgba(255,255,255,0.03); border-radius: 10px; padding: 12px; }
@@ -115,13 +117,13 @@ canvas { width: 100%; height: 220px; }
   border: 1px solid rgba(155,89,182,0.25); border-radius: 10px; 
   padding: 12px; margin-top: 12px;
 }
-.recommend h3 { color: #e8742a; font-size: 13px; margin-bottom: 6px; }
-.recommend p { font-size: 11px; color: #aaa; line-height: 1.7; }
+.recommend h3 { color: #e8742a; font-size: 15px; margin-bottom: 6px; }
+.recommend p { font-size: 13px; color: #aaa; line-height: 1.7; }
 
 /* Day tags */
 .day-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
 .day-tag {
-  font-size: 9px; padding: 2px 6px; border-radius: 4px;
+  font-size: 11px; padding: 3px 8px; border-radius: 4px;
   display: inline-flex; align-items: center; gap: 2px; font-weight: 600;
 }
 .tag-alt { background: rgba(26,188,156,0.15); color: #1abc9c; }
@@ -131,8 +133,8 @@ canvas { width: 100%; height: 220px; }
 
 /* Tips cards */
 .tips-card { margin-top: 12px; }
-.tips-card h3 { font-size: 13px; margin-bottom: 8px; color: #e8742a; }
-.tips-card p, .tips-card ul { font-size: 11px; color: #aaa; line-height: 1.8; }
+.tips-card h3 { font-size: 15px; margin-bottom: 8px; color: #e8742a; }
+.tips-card p, .tips-card ul { font-size: 13px; color: #aaa; line-height: 1.8; }
 .tips-card ul { list-style: none; padding: 0; }
 .tips-card li::before { content: '• '; color: #e8742a; }
 
@@ -148,7 +150,7 @@ canvas { width: 100%; height: 220px; }
 
 <div class="header">
   <h1>🐣 新疆伊犁环线</h1>
-  <p>11天 · 7/4–7/14 · 顺时针 · 带老人小孩舒适版</p>
+  <p>13天 · 7/2–7/14 · 顺时针 · 带老人小孩舒适版</p>
 </div>
 
 <div class="main">
@@ -157,28 +159,30 @@ canvas { width: 100%; height: 220px; }
 <div class="left">
   <div class="card">
     <div class="plan-header">
-      <div class="plan-icon">B</div>
-      <div><div class="plan-title">顺时针 · 乌市进→伊宁出 ⭐</div><div class="plan-sub">机票 ¥5350/人（¥2560+¥2790）</div></div>
+      <div class="plan-icon">🗺️</div>
+      <div><div class="plan-title">顺时针 · 乌市进→伊宁出</div><div class="plan-sub">13天 · 机票 ¥5350/人（¥2560+¥2790）</div></div>
     </div>
     <img src="yili-route-map.png" class="route-map" alt="顺时针路线图">
     <div class="stats-mini">
-      <div class="stat-item"><div class="stat-val">1436</div><div class="stat-lbl">总公里</div></div>
-      <div class="stat-item"><div class="stat-val">24.5h</div><div class="stat-lbl">总驾驶</div></div>
-      <div class="stat-item"><div class="stat-val">373</div><div class="stat-lbl">最累km</div></div>
-      <div class="stat-item"><div class="stat-val">1天</div><div class="stat-lbl">超300km</div></div>
+      <div class="stat-item"><div class="stat-val">1423</div><div class="stat-lbl">总公里</div></div>
+      <div class="stat-item"><div class="stat-val">22h</div><div class="stat-lbl">总驾驶</div></div>
+      <div class="stat-item"><div class="stat-val">270</div><div class="stat-lbl">最累km</div></div>
+      <div class="stat-item"><div class="stat-val">0天</div><div class="stat-lbl">超300km</div></div>
     </div>
     <div class="timeline">
-      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D1 · 7/4 周六</div><div class="day-route">上海虹桥14:20 ✈️ 乌鲁木齐19:30，休整</div><div class="day-km"><span class="light">✈️ 落地</span></div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 920m</span><span class="day-tag tag-cloth">👕 30°C+ 夏装</span></div><img class="day-img" src="img-wulumuqi.png"></div>
-      <div class="day-item"><div class="day-dot"></div><div class="day-num">D2 · 7/5 周日</div><div class="day-route">乌市 → 🔴S101百里丹霞 → 🏜️安集海 → 奎屯</div><div class="day-km">248km / 3h</div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 1000-1500m</span><span class="day-tag tag-road">🛣️ 碎石坑洼</span><span class="day-tag tag-cloth">👕 夏装+防晒</span><span class="day-tag tag-warn">⚠️ 安集海有土路</span></div><div class="day-imgs"><img src="img-danxia.png"><img src="img-anjihai.png"></div></div>
-      <div class="day-item"><div class="day-dot"></div><div class="day-num">D3 · 7/6 周一</div><div class="day-route">奎屯 → 🛣️独库公路全程 → 🌿那拉提</div><div class="day-km">270km / 5.5h</div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 最高3390m</span><span class="day-tag tag-road">🛣️ 弯多坡陡限速30-40</span><span class="day-tag tag-cloth">👕 冲锋衣+抓绒</span><span class="day-tag tag-warn">⚠️ 限行20:00-09:00 备氧气瓶</span></div><div class="day-imgs"><img src="img-duku.png"><img src="img-nalati.png"></div></div>
-      <div class="day-item"><div class="day-dot"></div><div class="day-num">D4 · 7/7 周二</div><div class="day-route">🌿 那拉提全天 → 晚上到唐布拉营地</div><div class="day-km">102km / 1.8h</div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 1800-2200m</span><span class="day-tag tag-road">🛣️ 路况好沿河谷</span><span class="day-tag tag-cloth">👕 长袖+薄外套</span><span class="day-tag tag-warn">⚠️ 草原蚊虫多穿长裤</span></div><img class="day-img" src="img-nalati.png"></div>
-      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D5 · 7/8 周三</div><div class="day-route">🏞️ 百里画廊 + 唐布拉 + 🍯蜂蜜（孟克特待定）</div><div class="day-km"><span class="light">~50km · 走走停停</span></div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 1500-2500m</span><span class="day-tag tag-road">🛣️ 路况好</span><span class="day-tag tag-cloth">👕 长袖+薄外套</span></div><img class="day-img" src="img-tangbula.png"></div>
-      <div class="day-item"><div class="day-dot"></div><div class="day-num">D6 · 7/9 周四</div><div class="day-route">唐布拉 → 76团 🏠 婆婆的故乡</div><div class="day-km">236km / 3.7h</div><div class="day-tags"><span class="day-tag tag-alt">🏔️ ~1800m</span><span class="day-tag tag-road">🛣️ 柏油路好</span><span class="day-tag tag-cloth">👕 正常夏装</span><span class="day-tag tag-warn">⚠️ 76团信号差 下离线地图</span></div><img class="day-img" src="img-76tuan.jpg"></div>
-      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D7 · 7/10 周五</div><div class="day-route">🌻 76团全天 🏠</div><div class="day-km"><span class="light">0km · 纯休息</span></div><div class="day-tags"><span class="day-tag tag-alt">🏔️ ~1800m</span><span class="day-tag tag-warn">⚠️ 信号差备现金</span></div><img class="day-img" src="img-76scenery.png"></div>
-      <div class="day-item"><div class="day-dot heavy"></div><div class="day-num">D8 · 7/11 周六</div><div class="day-route">76团 → 伊昭公路 → 伊宁 → 果子沟 → 💎赛里木湖营地</div><div class="day-km"><span class="heavy">373km / 5h ⚠️ 最累</span></div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 最高3100m</span><span class="day-tag tag-road">🛣️ 弯道极多 单车道会车难</span><span class="day-tag tag-cloth">👕 冲锋衣+抓绒</span><span class="day-tag tag-warn">⚠️ 伊昭随时封路 备选G218</span></div><div class="day-imgs"><img src="img-yizhao.png"><img src="img-guozigou.png"></div></div>
-      <div class="day-item"><div class="day-dot"></div><div class="day-num">D9 · 7/12 周日</div><div class="day-route">💎 赛里木湖全天（环湖+日出）→ 伊宁</div><div class="day-km">157km / 2.4h</div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 2070m</span><span class="day-tag tag-road">🛣️ 高速(果子沟大桥)</span><span class="day-tag tag-cloth">👕 早晚8-15°C 防风外套</span></div><img class="day-img" src="img-sailimu.png"></div>
-      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D10 · 7/13 周一</div><div class="day-route">🏙️ 伊宁全天（喀赞其+六星街）</div><div class="day-km"><span class="light">0km · 纯休息</span></div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 640m</span><span class="day-tag tag-cloth">👕 夏装</span></div><img class="day-img" src="img-yining.png"></div>
-      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D11 · 7/14 周二</div><div class="day-route">伊宁16:40 ✈️ 浦东22:05</div><div class="day-km"><span class="light">✈️ 回家</span></div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 640m</span></div></div>
+      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D1 · 7/2 周三</div><div class="day-route">上海虹桥 ✈️ 乌鲁木齐，休整</div><div class="day-km"><span class="light">✈️ 落地</span></div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 920m</span><span class="day-tag tag-cloth">👕 30°C+ 夏装</span></div><img class="day-img" src="img-wulumuqi.png"></div>
+      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D2 · 7/3 周四</div><div class="day-route">🏙️ 乌鲁木齐全天（大巴扎、二道桥、国际大巴扎）</div><div class="day-km"><span class="light">0km · 纯休息</span></div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 920m</span><span class="day-tag tag-cloth">👕 夏装 逗吃逗吃</span></div><img class="day-img" src="img-wulumuqi.png"></div>
+      <div class="day-item"><div class="day-dot"></div><div class="day-num">D3 · 7/4 周五</div><div class="day-route">乌市 → 🔴S101百里丹霞 → 🏜️安集海 → 奎屯</div><div class="day-km">248km / 3h</div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 1000-1500m</span><span class="day-tag tag-road">🛣️ 碎石坑洼</span><span class="day-tag tag-cloth">👕 夏装+防晒</span><span class="day-tag tag-warn">⚠️ 安集海有土路</span></div><div class="day-imgs"><img src="img-danxia.png"><img src="img-anjihai.png"></div></div>
+      <div class="day-item"><div class="day-dot"></div><div class="day-num">D4 · 7/5 周六</div><div class="day-route">奎屯 → 🛣️独库公路（北段+中段）→ 🌿那拉提</div><div class="day-km">270km / 5.5h</div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 最高3390m</span><span class="day-tag tag-road">🛣️ 弯多坡陡限速30-40</span><span class="day-tag tag-cloth">👕 冲锋衣+抓绒</span><span class="day-tag tag-warn">⚠️ 限行20:00-09:00 备氧气瓶</span></div><div class="day-imgs"><img src="img-duku.png"><img src="img-nalati.png"></div></div>
+      <div class="day-item"><div class="day-dot"></div><div class="day-num">D5 · 7/6 周日</div><div class="day-route">🌿 那拉提全天 → 晚上到唐布拉营地</div><div class="day-km">102km / 1.8h</div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 1800-2200m</span><span class="day-tag tag-road">🛣️ 路况好沿河谷</span><span class="day-tag tag-cloth">👕 长袖+薄外套</span><span class="day-tag tag-warn">⚠️ 草原蚊虫多穿长裤</span></div><img class="day-img" src="img-nalati.png"></div>
+      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D6 · 7/7 周一</div><div class="day-route">🏞️ 百里画廊 + 唐布拉 + 🍯蜂蜜（孟克特待定）</div><div class="day-km"><span class="light">~50km · 走走停停</span></div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 1500-2500m</span><span class="day-tag tag-road">🛣️ 路况好</span><span class="day-tag tag-cloth">👕 长袖+薄外套</span></div><img class="day-img" src="img-tangbula.png"></div>
+      <div class="day-item"><div class="day-dot"></div><div class="day-num">D7 · 7/8 周二</div><div class="day-route">唐布拉 → 76团 🏠 婆婆的故乡</div><div class="day-km">236km / 3.7h</div><div class="day-tags"><span class="day-tag tag-alt">🏔️ ~1800m</span><span class="day-tag tag-road">🛣️ 柏油路好</span><span class="day-tag tag-cloth">👕 正常夏装</span><span class="day-tag tag-warn">⚠️ 76团信号差 下离线地图</span></div><img class="day-img" src="img-76tuan.jpg"></div>
+      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D8 · 7/9 周三</div><div class="day-route">🌻 76团全天 🏠</div><div class="day-km"><span class="light">0km · 纯休息</span></div><div class="day-tags"><span class="day-tag tag-alt">🏔️ ~1800m</span><span class="day-tag tag-warn">⚠️ 信号差备现金</span></div><img class="day-img" src="img-76scenery.png"></div>
+      <div class="day-item"><div class="day-dot"></div><div class="day-num">D9 · 7/10 周四</div><div class="day-route">76团 → 伊昭公路 → 🏙️伊宁</div><div class="day-km">200km / 3.5h</div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 最高3100m</span><span class="day-tag tag-road">🛣️ 弯道极多 单车道会车难</span><span class="day-tag tag-cloth">👕 冲锋衣+抓绒</span><span class="day-tag tag-warn">⚠️ 伊昭随时封路 备选G218</span></div><img class="day-img" src="img-yizhao.png"></div>
+      <div class="day-item"><div class="day-dot"></div><div class="day-num">D10 · 7/11 周五</div><div class="day-route">伊宁 → 🌉果子沟 → 💎赛里木湖营地</div><div class="day-km">160km / 2h</div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 2070m</span><span class="day-tag tag-road">🛣️ 高速(果子沟大桥)</span><span class="day-tag tag-cloth">👕 早晚8-15°C 防风外套</span></div><div class="day-imgs"><img src="img-guozigou.png"><img src="img-sailimu.png"></div></div>
+      <div class="day-item"><div class="day-dot"></div><div class="day-num">D11 · 7/12 周六</div><div class="day-route">💎 赛里木湖全天（环湖+日出）→ 伊宁</div><div class="day-km">157km / 2.4h</div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 2070m</span><span class="day-tag tag-road">🛣️ 高速</span><span class="day-tag tag-cloth">👕 早晚8-15°C 防风外套</span></div><img class="day-img" src="img-sailimu.png"></div>
+      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D12 · 7/13 周日</div><div class="day-route">🏙️ 伊宁全天（喀赞其+六星街）</div><div class="day-km"><span class="light">0km · 纯休息</span></div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 640m</span><span class="day-tag tag-cloth">👕 夏装</span></div><img class="day-img" src="img-yining.png"></div>
+      <div class="day-item"><div class="day-dot rest"></div><div class="day-num">D13 · 7/14 周一</div><div class="day-route">伊宁16:40 ✈️ 浦东22:05</div><div class="day-km"><span class="light">✈️ 回家</span></div><div class="day-tags"><span class="day-tag tag-alt">🏔️ 640m</span></div></div>
     </div>
   </div>
 </div>
@@ -195,11 +199,11 @@ canvas { width: 100%; height: 220px; }
   <div class="recommend">
     <h3>🐣 为什么选顺时针？</h3>
     <p>
-      ✅ 后程越走越轻松（后3天：157+0+✈️）<br>
-      ✅ 独库公路全程270km完整体验<br>
-      ✅ 只有1天超300km，无连续赶路日<br>
-      ✅ 总里程最短（1436km）<br>
-      ✅ 适合带老人小孩的节奏
+      ✅ 后程越走越轻松（后4天：157+0+✈️）<br>
+      ✅ 独库公路北段+中段270km完整体验<br>
+      ✅ 没有任何一天超300km<br>
+      ✅ 总里程1423km<br>
+      ✅ 适合带老人小孩的舒适节奏
     </p>
   </div>
 
@@ -219,6 +223,56 @@ canvas { width: 100%; height: 220px; }
       <li>不建议纯电车（充电桩间隔超200km）</li>
       <li>必备：防滑链、充气泵、拖车绳、应急电源</li>
     </ul>
+  </div>
+
+  <div class="card tips-card" style="margin-top:12px;">
+    <h3>🚗 租车推荐</h3>
+    <p style="font-size:12px;color:#888;margin-bottom:10px;">4大1小 · 13天 · 独库+伊昭 · 乌市取车→伊宁还车</p>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:14px;font-weight:700;color:#e8742a;margin-bottom:6px;">⭐ 首选：理想 L8（增程式 · 6座）</div>
+      <ul>
+        <li>增程式四驱，没电烧油，零续航焦虑</li>
+        <li>6座独立座椅+空气悬挂，老人小孩长途超舒服</li>
+        <li>冰箱彩电大沙发，车内堪比移动客厅</li>
+        <li>油箱52L，满油满电综合续航~1000km</li>
+        <li>加95号油，亏电油耗~8-9L/百公里</li>
+        <li style="color:#e8742a;font-weight:600;">旺季日租 ¥700-1000 · 13天约 ¥12,000（含保险）</li>
+        <li style="color:#e8742a;font-weight:600;">油费约 ¥1,350（95号 ¥9.11/升）</li>
+        <li>平台推荐：悟空租车、携程租车、本地车行</li>
+      </ul>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:14px;font-weight:700;color:#1abc9c;margin-bottom:6px;">🥈 次选：丰田 皇冠陆放（混动 · 7座）</div>
+      <ul>
+        <li>就是新汉兰达！丰田在新疆满大街，修车最方便</li>
+        <li>2.5L混动省油，四驱版伊昭下雨也安心</li>
+        <li>7座第三排放倒=超大后备箱，行李随便装</li>
+        <li>加92号油，百公里油耗仅~6L</li>
+        <li style="color:#1abc9c;font-weight:600;">旺季日租 ¥600-800 · 13天约 ¥10,000（含保险）</li>
+        <li style="color:#1abc9c;font-weight:600;">油费约 ¥1,170（92号 ¥8.52/升）</li>
+        <li>平台推荐：一嗨租车、携程租车</li>
+      </ul>
+    </div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:14px;font-weight:700;color:#3498db;margin-bottom:6px;">💰 省钱：大众 探岳 2.0T（5座）</div>
+      <ul>
+        <li>空间够大，2.0T动力翻达坂随叫随到</li>
+        <li>底盘扎实，高速稳当</li>
+        <li style="color:#3498db;font-weight:600;">旺季日租 ¥400-550 · 13天约 ¥7,000（含保险）</li>
+        <li style="color:#3498db;font-weight:600;">油费约 ¥1,550（95号）</li>
+      </ul>
+    </div>
+    <div style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);border-radius:8px;padding:10px;margin-top:8px;">
+      <div style="font-size:13px;font-weight:700;color:#e74c3c;margin-bottom:4px;">⚠️ 租车避坑</div>
+      <ul style="font-size:12px;">
+        <li>旺季至少提前2-3周预订</li>
+        <li>买全险/尊享保险（~¥100/天），山路免赔省心</li>
+        <li>取车拍全车照片+视频，尤其底盘轮毂</li>
+        <li>确认能走独库+伊昭（部分保险排除非铺装路面）</li>
+        <li>异地还车费约 ¥800-1500（提前确认）</li>
+        <li>别租纯电车！充电桩间隔超200km</li>
+      </ul>
+    </div>
   </div>
 
   <div class="card tips-card" style="margin-top:12px;">
@@ -288,9 +342,9 @@ function drawChart() {
   const chartW = w - pad.left - pad.right;
   const chartH = h - pad.top - pad.bottom;
 
-  const data = [0, 248, 270, 102, 50, 236, 0, 373, 157, 0, 0];
-  const maxVal = 420;
-  const days = 11;
+  const data = [0, 0, 248, 270, 102, 50, 236, 0, 200, 160, 157, 0, 0];
+  const maxVal = 300;
+  const days = 13;
 
   function x(i) { return pad.left + (i / (days-1)) * chartW; }
   function y(v) { return pad.top + (1 - v/maxVal) * chartH; }
@@ -362,9 +416,9 @@ function drawAltChart() {
   const chartW = w - pad.left - pad.right;
   const chartH = h - pad.top - pad.bottom;
 
-  const data = [920, 1500, 3390, 2200, 2500, 1800, 1800, 3100, 2070, 640, 640];
+  const data = [920, 920, 1500, 3390, 2200, 2500, 1800, 1800, 3100, 2070, 2070, 640, 640];
   const maxVal = 3800;
-  const days = 11;
+  const days = 13;
 
   function x(i) { return pad.left + (i / (days-1)) * chartW; }
   function y(v) { return pad.top + (1 - v/maxVal) * chartH; }
