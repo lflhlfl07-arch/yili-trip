@@ -142,6 +142,26 @@ canvas { width: 100%; height: 220px; }
 .tips-card ul { list-style: none; padding: 0; }
 .tips-card li::before { content: '• '; color: #e8742a; }
 
+/* Budget table */
+.budget-table { font-size: 13px; }
+.budget-header {
+  display: grid; grid-template-columns: 30px 1fr 80px;
+  padding: 6px 0; margin-bottom: 4px;
+  font-size: 11px; color: #666; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.budget-row {
+  display: grid; grid-template-columns: 30px 1fr 80px; align-items: center;
+  padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.budget-icon { font-size: 15px; }
+.budget-detail { color: #aaa; font-size: 12px; }
+.budget-amount { text-align: right; font-weight: 700; color: #ccc; font-size: 13px; }
+.budget-divider { height: 2px; background: linear-gradient(90deg, #e8742a, #9b59b6); margin: 6px 0; border-radius: 2px; }
+.budget-total .budget-detail { color: #e8742a; font-size: 15px; font-weight: 800; }
+.budget-total .budget-amount { color: #e8742a; font-size: 18px; font-weight: 800; }
+.budget-per .budget-detail { color: #9b59b6; font-size: 14px; font-weight: 700; }
+.budget-per .budget-amount { color: #9b59b6; font-size: 16px; font-weight: 800; }
+
 /* Mobile */
 @media (max-width: 900px) {
   .main { flex-direction: column; }
@@ -312,6 +332,61 @@ canvas { width: 100%; height: 220px; }
       <li>76团信号差：提前下载离线地图</li>
       <li>达坂别久停：翻过就走，低海拔再休息</li>
     </ul>
+  </div>
+
+  <div class="card" style="margin-top:12px;">
+    <div class="section-title">💰 预算估算（5大1小）</div>
+    <div class="budget-table">
+      <div class="budget-header">
+        <span>项目</span><span>明细</span><span>金额</span>
+      </div>
+      <div class="budget-row">
+        <span class="budget-icon">✈️</span>
+        <span class="budget-detail">成人¥5,350×5 + 儿童¥2,675×1</span>
+        <span class="budget-amount">¥29,425</span>
+      </div>
+      <div class="budget-row">
+        <span class="budget-icon">🏨</span>
+        <span class="budget-detail">12晚 × ¥300/人 × 4人</span>
+        <span class="budget-amount">¥14,400</span>
+      </div>
+      <div class="budget-row">
+        <span class="budget-icon">🚗</span>
+        <span class="budget-detail">7座SUV 13天 + 异地还车</span>
+        <span class="budget-amount">¥11,000</span>
+      </div>
+      <div class="budget-row">
+        <span class="budget-icon">⛽</span>
+        <span class="budget-detail">~1500km × 12L/100km × ¥7.8</span>
+        <span class="budget-amount">¥1,400</span>
+      </div>
+      <div class="budget-row">
+        <span class="budget-icon">🎫</span>
+        <span class="budget-detail">赛里木湖+那拉提+喀赞其</span>
+        <span class="budget-amount">¥2,025</span>
+      </div>
+      <div class="budget-row">
+        <span class="budget-icon">🍜</span>
+        <span class="budget-detail">13天餐饮（早¥30/午¥60/晚¥80）</span>
+        <span class="budget-amount">¥11,900</span>
+      </div>
+      <div class="budget-row">
+        <span class="budget-icon">🧊</span>
+        <span class="budget-detail">过路费+停车+零食+药品+杂项</span>
+        <span class="budget-amount">¥2,000</span>
+      </div>
+      <div class="budget-divider"></div>
+      <div class="budget-row budget-total">
+        <span class="budget-icon">💰</span>
+        <span class="budget-detail">总计</span>
+        <span class="budget-amount">¥72,150</span>
+      </div>
+      <div class="budget-row budget-per">
+        <span class="budget-icon">👤</span>
+        <span class="budget-detail">人均（÷4人）</span>
+        <span class="budget-amount">¥18,038</span>
+      </div>
+    </div>
   </div>
 
   <div class="card" style="margin-top:12px;">
