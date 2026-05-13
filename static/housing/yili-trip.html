@@ -415,6 +415,7 @@ function drawChart() {
   const chartH = h - pad.top - pad.bottom;
 
   const data = [0, 0, 250, 260, 110, 100, 210, 80, 0, 200, 120, 150, 0, 0];
+  const hours = ['', '', '4-5h', '5.5h', '2h', '3-4h', '3.5h', '1.5h', '', '3.5h', '1.5h', '2h', '', ''];
   const maxVal = 300;
   const days = 14;
 
@@ -462,7 +463,10 @@ function drawChart() {
     ctx.strokeStyle = '#1a1a2e'; ctx.lineWidth = 2; ctx.stroke();
     if(data[i]>0) {
       ctx.fillStyle = data[i] >= 300 ? '#e74c3c' : '#bbb';
-      ctx.fillText(data[i]+'km', x(i), y(data[i])-12);
+      ctx.fillText(data[i]+'km', x(i), y(data[i])-20);
+      ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.font = '9px sans-serif';
+      ctx.fillText(hours[i], x(i), y(data[i])-9);
+      ctx.font = 'bold 10px sans-serif';
     }
   }
 
